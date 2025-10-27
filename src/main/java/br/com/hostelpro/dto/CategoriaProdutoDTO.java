@@ -1,10 +1,16 @@
 package br.com.hostelpro.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class CategoriaProdutoDTO {
 	private Integer id;
+	
+	@NotNull
 	private Integer estabelecimentoId;
 
 	@NotBlank
@@ -12,6 +18,8 @@ public class CategoriaProdutoDTO {
 	private String nome;
 
 	private Integer categoriaPaiId;
+	
+	private List<CategoriaProdutoDTO> subcategorias = new ArrayList<>();
 
 	// getters/setters
 	public Integer getId() {
@@ -44,5 +52,13 @@ public class CategoriaProdutoDTO {
 
 	public void setCategoriaPaiId(Integer categoriaPaiId) {
 		this.categoriaPaiId = categoriaPaiId;
+	}
+
+	public List<CategoriaProdutoDTO> getSubcategorias() {
+		return subcategorias;
+	}
+
+	public void setSubcategorias(List<CategoriaProdutoDTO> subcategorias) {
+		this.subcategorias = subcategorias;
 	}
 }

@@ -1,7 +1,18 @@
 package br.com.hostelpro.entity;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "categoria_produto")
@@ -13,6 +24,7 @@ public class CategoriaProduto {
 
 	@ManyToOne
 	@JoinColumn(name = "estabelecimento_id")
+//	@MapsId("id")
 	private Estabelecimento estabelecimento;
 
 	@Column(nullable = false, length = 100)
@@ -20,7 +32,11 @@ public class CategoriaProduto {
 
 	@ManyToOne
 	@JoinColumn(name = "categoria_pai_id")
+//	@MapsId("id")
 	private CategoriaProduto categoriaPai;
+	
+	@OneToMany(mappedBy = "categoriaPai")
+	private List<CategoriaProduto> subcategorias = new ArrayList<>();
 
 	@Column(name = "criado_em")
 	private LocalDateTime criadoEm = LocalDateTime.now();
@@ -28,7 +44,13 @@ public class CategoriaProduto {
 	@Column(name = "atualizado_em")
 	private LocalDateTime atualizadoEm = LocalDateTime.now();
 
-	// getters/setters
+	public CategoriaProduto() {
+	}
+	
+	public CategoriaProduto(Integer id) {
+	    this.id = id;
+	}
+	
 	public Integer getId() {
 		return id;
 	}
@@ -75,5 +97,13 @@ public class CategoriaProduto {
 
 	public void setAtualizadoEm(LocalDateTime atualizadoEm) {
 		this.atualizadoEm = atualizadoEm;
+	}
+
+	public List<CategoriaProduto> getSubcategorias() {
+		return subcategorias;
+	}
+
+	public void setSubcategorias(List<CategoriaProduto> subcategorias) {
+		this.subcategorias = subcategorias;
 	}
 }

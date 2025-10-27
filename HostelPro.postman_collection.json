@@ -1,0 +1,219 @@
+{
+  "info": {
+    "name": "HostelPro API",
+    "_postman_id": "b9e36e1c-6e59-48a1-9b2b-2025-api-hostelpro",
+    "description": "Coleção de requisições CRUD para todos os serviços da API HostelPro",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Estabelecimentos",
+      "item": [
+        {
+          "name": "Criar Estabelecimento",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/estabelecimentos",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Pousada Sol Nascente\",\n  \"cnpj\": \"12345678000100\",\n  \"email\": \"contato@pousadasol.com\",\n  \"telefone\": \"(11) 98765-4321\",\n  \"endereco\": \"Rua das Palmeiras, 123 - São Paulo\"\n}"
+            }
+          }
+        },
+        { "name": "Listar Estabelecimentos", "request": { "method": "GET", "url": "{{baseUrl}}/api/estabelecimentos" } },
+        { "name": "Buscar Estabelecimento por ID", "request": { "method": "GET", "url": "{{baseUrl}}/api/estabelecimentos/1" } },
+        {
+          "name": "Atualizar Estabelecimento",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/estabelecimentos/1",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Pousada Sol Atualizada\",\n  \"email\": \"novoemail@pousadasol.com\"\n}"
+            }
+          }
+        },
+        { "name": "Excluir Estabelecimento", "request": { "method": "DELETE", "url": "{{baseUrl}}/api/estabelecimentos/1" } }
+      ]
+    },
+    {
+      "name": "Usuários",
+      "item": [
+        {
+          "name": "Criar Usuário",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/usuarios",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estabelecimentoId\": 1,\n  \"nome\": \"João Silva\",\n  \"email\": \"joao@hostelpro.com\",\n  \"senha\": \"123456\",\n  \"perfil\": \"administrador\"\n}"
+            }
+          }
+        },
+        { "name": "Listar Usuários", "request": { "method": "GET", "url": "{{baseUrl}}/api/usuarios" } },
+        { "name": "Buscar Usuário por ID", "request": { "method": "GET", "url": "{{baseUrl}}/api/usuarios/1" } },
+        {
+          "name": "Atualizar Usuário",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/usuarios/1",
+            "body": { "mode": "raw", "raw": "{\n  \"nome\": \"João Atualizado\",\n  \"ativo\": true\n}" }
+          }
+        },
+        { "name": "Excluir Usuário", "request": { "method": "DELETE", "url": "{{baseUrl}}/api/usuarios/1" } }
+      ]
+    },
+    {
+      "name": "Quartos",
+      "item": [
+        {
+          "name": "Criar Quarto",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/quartos",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estabelecimentoId\": 1,\n  \"numero\": \"101\",\n  \"status\": \"disponível\",\n  \"observacao\": \"Quarto com vista para o mar\"\n}"
+            }
+          }
+        },
+        { "name": "Listar Quartos", "request": { "method": "GET", "url": "{{baseUrl}}/api/quartos" } },
+        { "name": "Buscar Quarto por ID", "request": { "method": "GET", "url": "{{baseUrl}}/api/quartos/1" } },
+        {
+          "name": "Atualizar Quarto",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/quartos/1",
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"ocupado\"\n}" }
+          }
+        },
+        { "name": "Excluir Quarto", "request": { "method": "DELETE", "url": "{{baseUrl}}/api/quartos/1" } }
+      ]
+    },
+    {
+      "name": "Clientes",
+      "item": [
+        {
+          "name": "Criar Cliente",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/clientes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estabelecimentoId\": 1,\n  \"nome\": \"Carlos Pereira\",\n  \"email\": \"carlos@teste.com\",\n  \"telefone\": \"(11) 90000-0000\"\n}"
+            }
+          }
+        },
+        { "name": "Listar Clientes", "request": { "method": "GET", "url": "{{baseUrl}}/api/clientes" } },
+        { "name": "Buscar Cliente por ID", "request": { "method": "GET", "url": "{{baseUrl}}/api/clientes/1" } },
+        {
+          "name": "Atualizar Cliente",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/clientes/1",
+            "body": { "mode": "raw", "raw": "{\n  \"telefone\": \"(11) 98888-0000\"\n}" }
+          }
+        },
+        { "name": "Excluir Cliente", "request": { "method": "DELETE", "url": "{{baseUrl}}/api/clientes/1" } }
+      ]
+    },
+    {
+      "name": "Produtos",
+      "item": [
+        {
+          "name": "Criar Produto",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/produtos",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estabelecimentoId\": 1,\n  \"nome\": \"Cerveja\",\n  \"preco\": 12.50,\n  \"estoque\": 20,\n  \"categoriaId\": 1\n}"
+            }
+          }
+        },
+        { "name": "Listar Produtos", "request": { "method": "GET", "url": "{{baseUrl}}/api/produtos" } },
+        { "name": "Buscar Produto por ID", "request": { "method": "GET", "url": "{{baseUrl}}/api/produtos/1" } },
+        {
+          "name": "Atualizar Produto",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/produtos/1",
+            "body": { "mode": "raw", "raw": "{\n  \"preco\": 13.00,\n  \"estoque\": 18\n}" }
+          }
+        },
+        { "name": "Excluir Produto", "request": { "method": "DELETE", "url": "{{baseUrl}}/api/produtos/1" } }
+      ]
+    },
+    {
+      "name": "Categorias",
+      "item": [
+        {
+          "name": "Criar Categoria",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/categorias",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estabelecimentoId\": 1,\n  \"nome\": \"Bebidas\"\n}"
+            }
+          }
+        },
+        { "name": "Listar Categorias", "request": { "method": "GET", "url": "{{baseUrl}}/api/categorias" } },
+        { "name": "Buscar Categoria por ID", "request": { "method": "GET", "url": "{{baseUrl}}/api/categorias/1" } },
+        {
+          "name": "Atualizar Categoria",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/categorias/1",
+            "body": { "mode": "raw", "raw": "{\n  \"nome\": \"Bebidas Alcoólicas\"\n}" }
+          }
+        },
+        { "name": "Excluir Categoria", "request": { "method": "DELETE", "url": "{{baseUrl}}/api/categorias/1" } }
+      ]
+    },
+    {
+      "name": "Pedidos",
+      "item": [
+        {
+          "name": "Criar Pedido",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/pedidos",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estabelecimentoId\": 1,\n  \"quartoId\": 1,\n  \"usuarioId\": 1,\n  \"status\": \"aberto\",\n  \"itens\": [\n    {\n      \"produtoId\": 1,\n      \"quantidade\": 2,\n      \"precoUnitario\": 12.5,\n      \"precoTotal\": 25.0,\n      \"nomeCliente\": \"Carlos\"\n    }\n  ]\n}"
+            }
+          }
+        },
+        { "name": "Listar Pedidos", "request": { "method": "GET", "url": "{{baseUrl}}/api/pedidos" } },
+        { "name": "Buscar Pedido por ID", "request": { "method": "GET", "url": "{{baseUrl}}/api/pedidos/1" } },
+        {
+          "name": "Atualizar Pedido",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/pedidos/1",
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"fechado\"\n}" }
+          }
+        },
+        { "name": "Excluir Pedido", "request": { "method": "DELETE", "url": "{{baseUrl}}/api/pedidos/1" } }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" }
+  ]
+}

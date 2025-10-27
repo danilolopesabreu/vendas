@@ -12,6 +12,7 @@ import br.com.hostelpro.entity.Estabelecimento;
 import br.com.hostelpro.exception.NotFoundException;
 import br.com.hostelpro.repository.CategoriaProdutoRepository;
 import br.com.hostelpro.repository.EstabelecimentoRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class CategoriaProdutoService {
@@ -24,18 +25,19 @@ public class CategoriaProdutoService {
     
     private Logger logger = LoggerFactory.getLogger(CategoriaProdutoService.class);
 
-    public CategoriaProduto criar(CategoriaProduto c) {
-        Estabelecimento est = estRepository.findById(c.getEstabelecimento().getId())
-                .orElseThrow(() -> new NotFoundException("Estabelecimento não encontrado: " + c.getEstabelecimento().getId()));
-        c.setEstabelecimento(est);
+    public CategoriaProduto criar(CategoriaProduto categoriaProduto) {
+    	
+        Estabelecimento est = estRepository.findById(categoriaProduto.getEstabelecimento().getId())
+                .orElseThrow(() -> new NotFoundException("Estabelecimento não encontrado: " + categoriaProduto.getEstabelecimento().getId()));
+        categoriaProduto.setEstabelecimento(est);
 
-        if (c.getCategoriaPai() != null && c.getCategoriaPai().getId() != null) {
-            CategoriaProduto pai = repository.findById(c.getCategoriaPai().getId())
-                    .orElseThrow(() -> new NotFoundException("Categoria pai não encontrada: " + c.getCategoriaPai().getId()));
-            c.setCategoriaPai(pai);
+        if (categoriaProduto.getCategoriaPai() != null && categoriaProduto.getCategoriaPai().getId() != null) {
+            CategoriaProduto pai = repository.findById(categoriaProduto.getCategoriaPai().getId())
+                    .orElseThrow(() -> new NotFoundException("Categoria pai não encontrada: " + categoriaProduto.getCategoriaPai().getId()));
+            categoriaProduto.setCategoriaPai(pai); 
         }
-
-        CategoriaProduto salvo = repository.save(c);
+        
+        CategoriaProduto salvo = repository.save(categoriaProduto);
         logger.info("Categoria criada id={}", salvo.getId());
         return salvo;
     }
@@ -45,7 +47,7 @@ public class CategoriaProdutoService {
     }
 
     public List<CategoriaProduto> listarPorEstabelecimento(Integer estabelecimentoId) {
-        return repository.findByEstabelecimentoId(estabelecimentoId);
+        return repository.findHierarquiaPorEstabelecimento(estabelecimentoId);
     }
 
     public CategoriaProduto atualizar(Integer id, CategoriaProduto dados) {

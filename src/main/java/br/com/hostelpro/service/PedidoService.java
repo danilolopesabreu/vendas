@@ -91,6 +91,11 @@ public class PedidoService {
     public List<Pedido> listarPorEstabelecimento(Integer estabelecimentoId) {
         return pedidoRepository.findByEstabelecimentoId(estabelecimentoId);
     }
+    
+    public List<Pedido> listarPorEstabelecimentoEQuarto(Integer estabelecimentoId, String numeroQuarto) {
+        List<Pedido> pedidos = pedidoRepository.findByEstabelecimentoAndOptionalQuartoWithProdutos(estabelecimentoId, numeroQuarto);
+        return pedidos;
+    }
 
     public Pedido atualizar(Integer id, Pedido dados) {
         Pedido existente = buscarPorId(id);

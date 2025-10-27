@@ -22,6 +22,8 @@ public class ItemPedidoDTO {
 
 	private String nomeCliente;
 	private Integer clienteId;
+	
+	private ProdutoDTO produto;
 
 	public Integer getId() {
 		return id;
@@ -77,6 +79,14 @@ public class ItemPedidoDTO {
 
 	public void setClienteId(Integer clienteId) {
 		this.clienteId = clienteId;
+	}
+
+	public ProdutoDTO getProduto() {
+		return produto;
+	}
+
+	public void setProduto(ProdutoDTO produto) {
+		this.produto = produto;
 	}
 
 }

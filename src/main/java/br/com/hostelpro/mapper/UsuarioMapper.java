@@ -9,6 +9,7 @@ import org.mapstruct.Mapping;
 public interface UsuarioMapper {
 
     @Mapping(source = "estabelecimentoId", target = "estabelecimento.id")
+    @Mapping(target = "ativo", defaultValue = "true")
     Usuario toEntity(UsuarioDTO dto);
 
     @Mapping(source = "estabelecimento.id", target = "estabelecimentoId")
