@@ -47,6 +47,11 @@ public class ProdutoController {
         return ResponseEntity.ok(service.listarPorEstabelecimento(estabelecimentoId).stream().map(mapper::toDTO).collect(Collectors.toList()));
     }
 
+    @GetMapping("/estabelecimento/{estabelecimentoId}/maisvendidos")
+    public ResponseEntity<List<ProdutoDTO>> listarMaisVendidos(@PathVariable Integer estabelecimentoId) {
+    	return ResponseEntity.ok(service.listarPorEstabelecimentoOrdenadoPorQtdVendaENome(estabelecimentoId).stream().map(mapper::toDTO).collect(Collectors.toList()));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ProdutoDTO> atualizar(@PathVariable Integer id, @Valid @RequestBody ProdutoDTO dto) {
         Produto entidade = mapper.toEntity(dto);

@@ -53,11 +53,14 @@ public class ProdutoService {
         return repository.findByEstabelecimentoId(estabelecimentoId);
     }
 
+    public List<Produto> listarPorEstabelecimentoOrdenadoPorQtdVendaENome(Integer estabelecimentoId) {
+    	return repository.findByEstabelecimentoIdOrderByQuantidadeVendidaDescNomeAsc(estabelecimentoId);
+    }
+
     public Produto atualizar(Integer id, Produto dados) {
         Produto existente = buscarPorId(id);
         existente.setNome(dados.getNome());
         existente.setPreco(dados.getPreco());
-        existente.setCategoria(dados.getCategoria());
         existente.setEstoque(dados.getEstoque());
         if (dados.getCategoriaProduto() != null && dados.getCategoriaProduto().getId() != null) {
             CategoriaProduto cat = categoriaRepository.findById(dados.getCategoriaProduto().getId())

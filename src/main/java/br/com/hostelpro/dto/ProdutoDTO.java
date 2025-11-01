@@ -1,84 +1,125 @@
 package br.com.hostelpro.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 
 public class ProdutoDTO {
-	private Integer id;
-	private Integer estabelecimentoId;
 
-	@NotBlank
-	@Size(max = 100)
-	private String nome;
+    private Integer id;
+    private Integer estabelecimentoId;
+    private String nome;
+    private BigDecimal preco;
+    private Integer estoque;
+    private Integer categoriaId;
+    private String origemCadastro;
+    private String imagem;
+    private String descricao;
+    private Integer quantidadeVendida;
+    private String situacao;
 
-	@NotNull
-	@Positive
-	private BigDecimal preco;
+    public ProdutoDTO() {
+    }
 
-	@Size(max = 50)
-	private String categoria;
+    public ProdutoDTO(Integer id, Integer estabelecimentoId, String nome, BigDecimal preco, Integer estoque,
+                      Integer categoriaId, String origemCadastro, String imagem, String descricao,
+                      Integer quantidadeVendida, String situacao) {
+        this.id = id;
+        this.estabelecimentoId = estabelecimentoId;
+        this.nome = nome;
+        this.preco = preco;
+        this.estoque = estoque;
+        this.categoriaId = categoriaId;
+        this.origemCadastro = origemCadastro;
+        this.imagem = imagem;
+        this.descricao = descricao;
+        this.quantidadeVendida = quantidadeVendida;
+        this.situacao = situacao;
+    }
 
-	private Integer estoque;
+    public Integer getId() {
+        return id;
+    }
 
-	private Integer categoriaId;
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	// getters/setters
-	public Integer getId() {
-		return id;
-	}
+    public Integer getEstabelecimentoId() {
+        return estabelecimentoId;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public void setEstabelecimentoId(Integer estabelecimentoId) {
+        this.estabelecimentoId = estabelecimentoId;
+    }
 
-	public Integer getEstabelecimentoId() {
-		return estabelecimentoId;
-	}
+    public String getNome() {
+        return nome;
+    }
 
-	public void setEstabelecimentoId(Integer estabelecimentoId) {
-		this.estabelecimentoId = estabelecimentoId;
-	}
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-	public String getNome() {
-		return nome;
-	}
+    public BigDecimal getPreco() {
+        return preco;
+    }
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+    public void setPreco(BigDecimal preco) {
+        this.preco = preco;
+    }
 
-	public BigDecimal getPreco() {
-		return preco;
-	}
+    public Integer getEstoque() {
+        return estoque;
+    }
 
-	public void setPreco(BigDecimal preco) {
-		this.preco = preco;
-	}
+    public void setEstoque(Integer estoque) {
+        this.estoque = estoque;
+    }
 
-	public String getCategoria() {
-		return categoria;
-	}
+    public Integer getCategoriaId() {
+        return categoriaId;
+    }
 
-	public void setCategoria(String categoria) {
-		this.categoria = categoria;
-	}
+    public void setCategoriaId(Integer categoriaId) {
+        this.categoriaId = categoriaId;
+    }
 
-	public Integer getEstoque() {
-		return estoque;
-	}
+    public String getOrigemCadastro() {
+        return origemCadastro;
+    }
 
-	public void setEstoque(Integer estoque) {
-		this.estoque = estoque;
-	}
+    public void setOrigemCadastro(String origemCadastro) {
+        this.origemCadastro = origemCadastro;
+    }
 
-	public Integer getCategoriaId() {
-		return categoriaId;
-	}
+    public String getImagem() {
+        return imagem;
+    }
 
-	public void setCategoriaId(Integer categoriaId) {
-		this.categoriaId = categoriaId;
-	}
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public Integer getQuantidadeVendida() {
+        return quantidadeVendida;
+    }
+
+    public void setQuantidadeVendida(Integer quantidadeVendida) {
+        this.quantidadeVendida = quantidadeVendida;
+    }
+
+    public String getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(String situacao) {
+        this.situacao = situacao;
+    }
 }

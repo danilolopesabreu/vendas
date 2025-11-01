@@ -60,22 +60,17 @@ public class PedidoService {
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado: " + pedido.getUsuario().getId()));
         pedido.setUsuario(usuario);
 
-        // Para cada item: validar produto e cliente (se id fornecido), calcular total
+        // Para cada item: validar produto e calcular total
         if (pedido.getItens() != null) {
             for (ItemPedido item : pedido.getItens()) {
-                Produto produto = produtoRepository.findById(item.getProduto().getId())
+              
+            	Produto produto = produtoRepository.findById(item.getProduto().getId())
                         .orElseThrow(() -> new NotFoundException("Produto não encontrado: " + item.getProduto().getId()));
+                
+            	produto.setQuantidadeVendida(produto.getQuantidadeVendida() + item.getQuantidade());
+            	
                 item.setProduto(produto);
-                if (item.getCliente() != null && item.getCliente().getId() != null) {
-                    Cliente cliente = clienteRepository.findById(item.getCliente().getId())
-                            .orElseThrow(() -> new NotFoundException("Cliente não encontrado: " + item.getCliente().getId()));
-                    item.setCliente(cliente);
-                    item.setNomeCliente(cliente.getNome());
-                }
-                // preço unitário e total (garantir consistência)
-                if (item.getPrecoUnitario() == null) item.setPrecoUnitario(produto.getPreco());
-                item.setPrecoTotal(item.getPrecoUnitario().multiply(new BigDecimal(item.getQuantidade())));
-                item.setPedido(pedido);
+                
             }
         }
 
@@ -100,14 +95,6 @@ public class PedidoService {
     public Pedido atualizar(Integer id, Pedido dados) {
         Pedido existente = buscarPorId(id);
         existente.setStatus(dados.getStatus());
-        // atualização de itens pode ser complexa; aqui substituímos por simplicidade
-        existente.getItens().clear();
-        if (dados.getItens() != null) {
-            for (ItemPedido i : dados.getItens()) {
-                i.setPedido(existente);
-                existente.getItens().add(i);
-            }
-        }
         Pedido salvo = pedidoRepository.save(existente);
         logger.info("Pedido atualizado id={}", salvo.getId());
         return salvo;

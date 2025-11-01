@@ -1,7 +1,15 @@
 package br.com.hostelpro.entity;
 
-import jakarta.persistence.*;
 import java.math.BigDecimal;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "itens_pedido")
@@ -27,13 +35,6 @@ public class ItemPedido {
 
 	@Column(name = "preco_total", nullable = false, precision = 10, scale = 2)
 	private BigDecimal precoTotal;
-
-	@Column(name = "nome_cliente", length = 100)
-	private String nomeCliente;
-
-	@ManyToOne
-	@JoinColumn(name = "cliente_id")
-	private Cliente cliente;
 
 	// getters/setters
 	public Integer getId() {
@@ -84,19 +85,4 @@ public class ItemPedido {
 		this.precoTotal = precoTotal;
 	}
 
-	public String getNomeCliente() {
-		return nomeCliente;
-	}
-
-	public void setNomeCliente(String nomeCliente) {
-		this.nomeCliente = nomeCliente;
-	}
-
-	public Cliente getCliente() {
-		return cliente;
-	}
-
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
-	}
 }

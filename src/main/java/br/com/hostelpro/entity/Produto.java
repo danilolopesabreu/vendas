@@ -15,14 +15,11 @@ public class Produto {
 	@JoinColumn(name = "estabelecimento_id")
 	private Estabelecimento estabelecimento;
 
-	@Column(nullable = false, length = 100)
+	@Column(nullable = false, length = 150)
 	private String nome;
 
 	@Column(nullable = false, precision = 10, scale = 2)
 	private BigDecimal preco;
-
-	@Column(length = 50)
-	private String categoria;
 
 	@Column(nullable = false)
 	private Integer estoque = 0;
@@ -31,7 +28,21 @@ public class Produto {
 	@JoinColumn(name = "categoria_id")
 	private CategoriaProduto categoriaProduto;
 
-	// getters/setters
+	@Column(nullable = false)
+	private String origemCadastro = "fabrica";
+	
+	@Column(nullable = true)
+	private String imagem;
+	
+	@Column(nullable = true)
+	private String descricao;
+	
+	@Column(nullable = false)
+	private Integer quantidadeVendida = 0;
+	
+	@Column(nullable = false)
+	private String situacao = "ativo";
+	
 	public Integer getId() {
 		return id;
 	}
@@ -64,14 +75,6 @@ public class Produto {
 		this.preco = preco;
 	}
 
-	public String getCategoria() {
-		return categoria;
-	}
-
-	public void setCategoria(String categoria) {
-		this.categoria = categoria;
-	}
-
 	public Integer getEstoque() {
 		return estoque;
 	}
@@ -86,5 +89,45 @@ public class Produto {
 
 	public void setCategoriaProduto(CategoriaProduto categoriaProduto) {
 		this.categoriaProduto = categoriaProduto;
+	}
+
+	public String getOrigemCadastro() {
+		return origemCadastro;
+	}
+
+	public void setOrigemCadastro(String origemCadastro) {
+		this.origemCadastro = origemCadastro;
+	}
+
+	public String getImagem() {
+		return imagem;
+	}
+
+	public void setImagem(String imagem) {
+		this.imagem = imagem;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public Integer getQuantidadeVendida() {
+		return quantidadeVendida;
+	}
+
+	public void setQuantidadeVendida(Integer quantidadeVendida) {
+		this.quantidadeVendida = quantidadeVendida;
+	}
+
+	public String getSituacao() {
+		return situacao;
+	}
+
+	public void setSituacao(String situacao) {
+		this.situacao = situacao;
 	}
 }

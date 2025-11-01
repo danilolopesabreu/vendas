@@ -23,6 +23,10 @@ public class PedidoDTO {
 
 	private List<ItemPedidoDTO> itens;
 
+	private String nomeCliente;
+	
+	private Integer clienteId;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -77,6 +81,22 @@ public class PedidoDTO {
 
 	public void setItens(List<ItemPedidoDTO> itens) {
 		this.itens = itens;
+	}
+
+	public String getNomeCliente() {
+		return nomeCliente;
+	}
+
+	public void setNomeCliente(String nomeCliente) {
+		this.nomeCliente = nomeCliente;
+	}
+
+	public Integer getClienteId() {
+		return clienteId;
+	}
+
+	public void setClienteId(Integer clienteId) {
+		this.clienteId = clienteId;
 	}
 
 }

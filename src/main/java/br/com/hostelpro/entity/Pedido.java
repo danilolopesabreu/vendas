@@ -34,6 +34,13 @@ public class Pedido {
 	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ItemPedido> itens = new ArrayList<>();
 
+	@Column
+	private String nomeCliente;
+	
+	@ManyToOne
+	@JoinColumn(name = "cliente_id")
+	private Cliente cliente;
+	
 	// getters/setters
 	public Integer getId() {
 		return id;
@@ -97,5 +104,21 @@ public class Pedido {
 	public void addItem(ItemPedido item) {
 		item.setPedido(this);
 		this.itens.add(item);
+	}
+
+	public String getNomeCliente() {
+		return nomeCliente;
+	}
+
+	public void setNomeCliente(String nomeCliente) {
+		this.nomeCliente = nomeCliente;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 }

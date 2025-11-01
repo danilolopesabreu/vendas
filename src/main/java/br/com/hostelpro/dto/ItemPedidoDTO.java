@@ -12,7 +12,7 @@ public class ItemPedidoDTO {
 
 	@NotNull
 	@Positive
-	private Integer quantidade = 1;
+	private Integer quantidade;
 
 	@NotNull
 	private BigDecimal precoUnitario;
@@ -20,9 +20,6 @@ public class ItemPedidoDTO {
 	@NotNull
 	private BigDecimal precoTotal;
 
-	private String nomeCliente;
-	private Integer clienteId;
-	
 	private ProdutoDTO produto;
 
 	public Integer getId() {
@@ -63,22 +60,6 @@ public class ItemPedidoDTO {
 
 	public void setPrecoTotal(BigDecimal precoTotal) {
 		this.precoTotal = precoTotal;
-	}
-
-	public String getNomeCliente() {
-		return nomeCliente;
-	}
-
-	public void setNomeCliente(String nomeCliente) {
-		this.nomeCliente = nomeCliente;
-	}
-
-	public Integer getClienteId() {
-		return clienteId;
-	}
-
-	public void setClienteId(Integer clienteId) {
-		this.clienteId = clienteId;
 	}
 
 	public ProdutoDTO getProduto() {
