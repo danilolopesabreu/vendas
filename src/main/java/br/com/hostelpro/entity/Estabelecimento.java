@@ -2,6 +2,8 @@ package br.com.hostelpro.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "estabelecimentos")
@@ -29,6 +31,15 @@ public class Estabelecimento {
 	@Column(name = "data_criacao")
 	private LocalDateTime dataCriacao = LocalDateTime.now();
 
+	@OneToMany(mappedBy = "estabelecimento", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Usuario> usuarios = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "estabelecimento", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<CategoriaProduto> categoriaProduto = new ArrayList<>();
+	
+	@Column
+	private int idTipoEstabelecimento;
+	
 	// getters e setters
 	public Integer getId() {
 		return id;
@@ -84,5 +95,13 @@ public class Estabelecimento {
 
 	public void setDataCriacao(LocalDateTime dataCriacao) {
 		this.dataCriacao = dataCriacao;
+	}
+
+	public int getIdTipoEstabelecimento() {
+		return idTipoEstabelecimento;
+	}
+
+	public void setIdTipoEstabelecimento(int idTipoEstabelecimento) {
+		this.idTipoEstabelecimento = idTipoEstabelecimento;
 	}
 }

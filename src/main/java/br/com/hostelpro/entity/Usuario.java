@@ -23,8 +23,8 @@ public class Usuario {
 	@Column(name = "senha_hash", nullable = false, length = 200)
 	private String senhaHash;
 
-	@Column(length = 20)
-	private String perfil = "administrador";
+	@Column(length = 20, nullable = false)
+	private String perfil;
 
 	@Column(nullable = false)
 	private Boolean ativo = true;

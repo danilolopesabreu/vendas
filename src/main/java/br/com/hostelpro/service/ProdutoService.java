@@ -62,6 +62,7 @@ public class ProdutoService {
         existente.setNome(dados.getNome());
         existente.setPreco(dados.getPreco());
         existente.setEstoque(dados.getEstoque());
+        
         if (dados.getCategoriaProduto() != null && dados.getCategoriaProduto().getId() != null) {
             CategoriaProduto cat = categoriaRepository.findById(dados.getCategoriaProduto().getId())
                     .orElseThrow(() -> new NotFoundException("Categoria não encontrada: " + dados.getCategoriaProduto().getId()));
@@ -69,6 +70,7 @@ public class ProdutoService {
         } else {
             existente.setCategoriaProduto(null);
         }
+        
         Produto salvo = repository.save(existente);
         logger.info("Produto atualizado id={}", salvo.getId());
         return salvo;

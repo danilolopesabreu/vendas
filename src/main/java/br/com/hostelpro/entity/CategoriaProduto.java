@@ -24,7 +24,6 @@ public class CategoriaProduto {
 
 	@ManyToOne
 	@JoinColumn(name = "estabelecimento_id")
-//	@MapsId("id")
 	private Estabelecimento estabelecimento;
 
 	@Column(nullable = false, length = 100)
@@ -32,7 +31,6 @@ public class CategoriaProduto {
 
 	@ManyToOne
 	@JoinColumn(name = "categoria_pai_id")
-//	@MapsId("id")
 	private CategoriaProduto categoriaPai;
 	
 	@OneToMany(mappedBy = "categoriaPai")
@@ -43,6 +41,9 @@ public class CategoriaProduto {
 
 	@Column(name = "atualizado_em")
 	private LocalDateTime atualizadoEm = LocalDateTime.now();
+	
+	@Column
+	private String imagem;
 
 	public CategoriaProduto() {
 	}
@@ -105,5 +106,13 @@ public class CategoriaProduto {
 
 	public void setSubcategorias(List<CategoriaProduto> subcategorias) {
 		this.subcategorias = subcategorias;
+	}
+
+	public String getImagem() {
+		return imagem;
+	}
+
+	public void setImagem(String imagem) {
+		this.imagem = imagem;
 	}
 }

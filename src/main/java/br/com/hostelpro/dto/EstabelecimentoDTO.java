@@ -1,5 +1,7 @@
 package br.com.hostelpro.dto;
 
+import java.util.List;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -21,6 +23,12 @@ public class EstabelecimentoDTO {
 
 	@Size(max = 200)
 	private String endereco;
+	
+	private List<UsuarioDTO> usuarios;
+	
+	private List<CategoriaProdutoDTO> categoriaProduto;
+	
+	private int idTipoEstabelecimento;
 
 	// getters/setters
 	public Integer getId() {
@@ -69,5 +77,29 @@ public class EstabelecimentoDTO {
 
 	public void setEndereco(String endereco) {
 		this.endereco = endereco;
+	}
+
+	public List<UsuarioDTO> getUsuarios() {
+		return usuarios;
+	}
+
+	public void setUsuarios(List<UsuarioDTO> usuarios) {
+		this.usuarios = usuarios;
+	}
+
+	public List<CategoriaProdutoDTO> getCategoriaProduto() {
+		return categoriaProduto;
+	}
+
+	public void setCategoriaProduto(List<CategoriaProdutoDTO> categoriaProduto) {
+		this.categoriaProduto = categoriaProduto;
+	}
+
+	public int getIdTipoEstabelecimento() {
+		return idTipoEstabelecimento;
+	}
+
+	public void setIdTipoEstabelecimento(int idTipoEstabelecimento) {
+		this.idTipoEstabelecimento = idTipoEstabelecimento;
 	}
 }
