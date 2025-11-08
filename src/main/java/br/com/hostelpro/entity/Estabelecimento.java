@@ -9,6 +9,8 @@ import java.util.List;
 @Table(name = "estabelecimentos")
 public class Estabelecimento {
 
+	public static final Integer ID_MODELO = 1;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
@@ -33,13 +35,13 @@ public class Estabelecimento {
 
 	@OneToMany(mappedBy = "estabelecimento", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Usuario> usuarios = new ArrayList<>();
-	
+
 	@OneToMany(mappedBy = "estabelecimento", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CategoriaProduto> categoriaProduto = new ArrayList<>();
-	
+
 	@Column
 	private int idTipoEstabelecimento;
-	
+
 	// getters e setters
 	public Integer getId() {
 		return id;
@@ -104,4 +106,30 @@ public class Estabelecimento {
 	public void setIdTipoEstabelecimento(int idTipoEstabelecimento) {
 		this.idTipoEstabelecimento = idTipoEstabelecimento;
 	}
+
+	public List<Usuario> getUsuarios() {
+		return usuarios;
+	}
+
+	public void setUsuarios(List<Usuario> usuarios) {
+		this.usuarios = usuarios;
+	}
+
+	public List<CategoriaProduto> getCategoriaProduto() {
+		if (categoriaProduto == null)
+			categoriaProduto = new ArrayList<>();
+		return categoriaProduto;
+	}
+
+	public void setCategoriaProduto(List<CategoriaProduto> categoriaProduto) {
+		this.categoriaProduto = categoriaProduto;
+	}
+
+	@Override
+	public String toString() {
+		return "Estabelecimento [id=" + id + ", nome=" + nome + ", cnpj=" + cnpj + ", email=" + email + ", telefone="
+				+ telefone + ", endereco=" + endereco + ", dataCriacao=" + dataCriacao + ", usuarios=" + usuarios
+				+ ", categoriaProduto=" + categoriaProduto + ", idTipoEstabelecimento=" + idTipoEstabelecimento + "]";
+	}
+
 }

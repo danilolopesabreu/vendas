@@ -15,4 +15,9 @@ public interface CategoriaProdutoRepository extends JpaRepository<CategoriaProdu
 	@Query("SELECT c FROM CategoriaProduto c LEFT JOIN FETCH c.subcategorias WHERE c.estabelecimento.id = :estabelecimentoId AND c.categoriaPai IS NULL")
 	List<CategoriaProduto> findHierarquiaPorEstabelecimento(@Param("estabelecimentoId") Integer estabelecimentoId);
 
+	@Query("SELECT c FROM CategoriaProduto c WHERE c.estabelecimento.id = :estabelecimentoId AND c.categoriaPai IS NULL")
+	List<CategoriaProduto> listarCategoriasPrincipais(@Param("estabelecimentoId") Integer estabelecimentoId);
+	
+    List<CategoriaProduto> findByEstabelecimentoIdAndCategoriaPaiIsNull(Integer estabelecimentoId);
+
 }

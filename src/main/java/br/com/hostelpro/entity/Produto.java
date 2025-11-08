@@ -130,4 +130,13 @@ public class Produto {
 	public void setSituacao(String situacao) {
 		this.situacao = situacao;
 	}
+
+	@Override
+	public String toString() {
+		return "Produto [id=" + id + ", estabelecimento=" + estabelecimento + ", nome=" + nome + ", preco=" + preco
+				+ ", estoque=" + estoque + ", categoriaProduto=" + categoriaProduto + ", origemCadastro="
+				+ origemCadastro + ", imagem=" + imagem + ", descricao=" + descricao + ", quantidadeVendida="
+				+ quantidadeVendida + ", situacao=" + situacao + "]";
+	}
+	
 }

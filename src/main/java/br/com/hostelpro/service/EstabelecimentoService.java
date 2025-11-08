@@ -15,22 +15,33 @@ import br.com.hostelpro.repository.EstabelecimentoRepository;
 public class EstabelecimentoService {
 
 	@Autowired
-    private EstabelecimentoRepository repository;
-    
+    private EstabelecimentoRepository estabelecimentoRepository;
+	
+	@Autowired
+	private EstabelecimentoReplicationService estabelecimentoReplicationService;
+	    
 	private Logger logger = LoggerFactory.getLogger(EstabelecimentoService.class);
 
     public Estabelecimento criar(Estabelecimento e) {
-        Estabelecimento salvo = repository.save(e);
+//        Estabelecimento salvo = estabelecimentoRepository.save(e);
+    	
+    	var salvo = estabelecimentoReplicationService.criarComCategoriasSelecionadas(e);
+    	
         logger.info("Estabelecimento criado id={}", salvo.getId());
+        
+//        Usuario u = e.getUsuarios().get(0);
+//        u.setEstabelecimento(salvo);
+//        this.usuarioService.criar(u);
+        
         return salvo;
     }
 
     public Estabelecimento buscarPorId(Integer id) {
-        return repository.findById(id).orElseThrow(() -> new NotFoundException("Estabelecimento não encontrado: " + id));
+        return estabelecimentoRepository.findById(id).orElseThrow(() -> new NotFoundException("Estabelecimento não encontrado: " + id));
     }
 
     public List<Estabelecimento> listarTodos() {
-        return repository.findAll();
+        return estabelecimentoRepository.findAll();
     }
 
     public Estabelecimento atualizar(Integer id, Estabelecimento dados) {
@@ -40,16 +51,16 @@ public class EstabelecimentoService {
         existente.setEmail(dados.getEmail());
         existente.setTelefone(dados.getTelefone());
         existente.setEndereco(dados.getEndereco());
-        Estabelecimento salvo = repository.save(existente);
+        Estabelecimento salvo = estabelecimentoRepository.save(existente);
         logger.info("Estabelecimento atualizado id={}", salvo.getId());
         return salvo;
     }
 
     public void deletar(Integer id) {
-        if (!repository.existsById(id)) {
+        if (!estabelecimentoRepository.existsById(id)) {
             throw new NotFoundException("Estabelecimento não encontrado: " + id);
         }
-        repository.deleteById(id);
+        estabelecimentoRepository.deleteById(id);
         logger.info("Estabelecimento deletado id={}", id);
     }
 }

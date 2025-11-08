@@ -20,7 +20,7 @@ public class Usuario {
 	@Column(nullable = false, unique = true, length = 100)
 	private String email;
 
-	@Column(name = "senha_hash", nullable = false, length = 200)
+	@Column(name = "senha_hash", nullable = true, length = 200)
 	private String senhaHash;
 
 	@Column(length = 20, nullable = false)

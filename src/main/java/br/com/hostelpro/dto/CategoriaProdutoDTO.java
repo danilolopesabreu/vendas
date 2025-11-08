@@ -1,25 +1,26 @@
 package br.com.hostelpro.dto;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-
 public class CategoriaProdutoDTO {
+	
 	private Integer id;
 	
-	@NotNull
 	private Integer estabelecimentoId;
 
-	@NotBlank
-	@Size(max = 100)
 	private String nome;
 
-	private Integer categoriaPaiId;
+	private CategoriaProdutoDTO categoriaPai;
 	
 	private List<CategoriaProdutoDTO> subcategorias = new ArrayList<>();
+	
+	private LocalDateTime criadoEm;
+
+	private LocalDateTime atualizadoEm;
+	
+	private String imagem;
 
 	// getters/setters
 	public Integer getId() {
@@ -46,19 +47,43 @@ public class CategoriaProdutoDTO {
 		this.nome = nome;
 	}
 
-	public Integer getCategoriaPaiId() {
-		return categoriaPaiId;
-	}
-
-	public void setCategoriaPaiId(Integer categoriaPaiId) {
-		this.categoriaPaiId = categoriaPaiId;
-	}
-
 	public List<CategoriaProdutoDTO> getSubcategorias() {
 		return subcategorias;
 	}
 
 	public void setSubcategorias(List<CategoriaProdutoDTO> subcategorias) {
 		this.subcategorias = subcategorias;
+	}
+
+	public CategoriaProdutoDTO getCategoriaPai() {
+		return categoriaPai;
+	}
+
+	public void setCategoriaPai(CategoriaProdutoDTO categoriaPai) {
+		this.categoriaPai = categoriaPai;
+	}
+
+	public LocalDateTime getCriadoEm() {
+		return criadoEm;
+	}
+
+	public void setCriadoEm(LocalDateTime criadoEm) {
+		this.criadoEm = criadoEm;
+	}
+
+	public LocalDateTime getAtualizadoEm() {
+		return atualizadoEm;
+	}
+
+	public void setAtualizadoEm(LocalDateTime atualizadoEm) {
+		this.atualizadoEm = atualizadoEm;
+	}
+
+	public String getImagem() {
+		return imagem;
+	}
+
+	public void setImagem(String imagem) {
+		this.imagem = imagem;
 	}
 }

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,7 +34,7 @@ public class CategoriaProduto {
 	@JoinColumn(name = "categoria_pai_id")
 	private CategoriaProduto categoriaPai;
 	
-	@OneToMany(mappedBy = "categoriaPai")
+	@OneToMany(mappedBy = "categoriaPai", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CategoriaProduto> subcategorias = new ArrayList<>();
 
 	@Column(name = "criado_em")
@@ -44,6 +45,9 @@ public class CategoriaProduto {
 	
 	@Column
 	private String imagem;
+	
+	@OneToMany(mappedBy = "categoriaProduto", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Produto> produtos;
 
 	public CategoriaProduto() {
 	}
@@ -114,5 +118,15 @@ public class CategoriaProduto {
 
 	public void setImagem(String imagem) {
 		this.imagem = imagem;
+	}
+
+	public List<Produto> getProdutos() {
+		if(produtos == null)
+			produtos = new ArrayList<>();
+		return produtos;
+	}
+
+	public void setProdutos(List<Produto> produtos) {
+		this.produtos = produtos;
 	}
 }
