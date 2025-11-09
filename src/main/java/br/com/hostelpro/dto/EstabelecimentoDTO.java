@@ -28,7 +28,7 @@ public class EstabelecimentoDTO {
 	
 	private List<CategoriaProdutoDTO> categoriaProduto;
 	
-	private int idTipoEstabelecimento;
+	private TipoEstabelecimentoDTO tipoEstabelecimento;
 
 	// getters/setters
 	public Integer getId() {
@@ -95,11 +95,11 @@ public class EstabelecimentoDTO {
 		this.categoriaProduto = categoriaProduto;
 	}
 
-	public int getIdTipoEstabelecimento() {
-		return idTipoEstabelecimento;
+	public TipoEstabelecimentoDTO getTipoEstabelecimento() {
+		return tipoEstabelecimento;
 	}
 
-	public void setIdTipoEstabelecimento(int idTipoEstabelecimento) {
-		this.idTipoEstabelecimento = idTipoEstabelecimento;
+	public void setTipoEstabelecimento(TipoEstabelecimentoDTO tipoEstabelecimento) {
+		this.tipoEstabelecimento = tipoEstabelecimento;
 	}
 }

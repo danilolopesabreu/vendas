@@ -9,6 +9,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -25,8 +27,9 @@ public class TipoEstabelecimento {
 	@Column
 	private String nome;
 
-	@Column
-	private String agrupador;
+	@ManyToOne
+	@JoinColumn(name = "agrupador_id")
+	private Agrupador agrupador;
 	
 	@OneToMany(mappedBy = "tipoEstabelecimento", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Estabelecimento> estabelecimentos = new ArrayList<>();
@@ -47,20 +50,20 @@ public class TipoEstabelecimento {
 		this.nome = nome;
 	}
 
-	public String getAgrupador() {
-		return agrupador;
-	}
-
-	public void setAgrupador(String agrupador) {
-		this.agrupador = agrupador;
-	}
-
 	public List<Estabelecimento> getEstabelecimentos() {
 		return estabelecimentos;
 	}
 
 	public void setEstabelecimentos(List<Estabelecimento> estabelecimentos) {
 		this.estabelecimentos = estabelecimentos;
+	}
+
+	public Agrupador getAgrupador() {
+		return agrupador;
+	}
+
+	public void setAgrupador(Agrupador agrupador) {
+		this.agrupador = agrupador;
 	}
 
 }

@@ -1,59 +1,49 @@
 package br.com.hostelpro.entity;
 
-import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "quartos")
-public class Quarto {
+@Table(name = "agrupador")
+public class Agrupador {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@ManyToOne
-	@JoinColumn(name = "estabelecimento_id")
-	private Estabelecimento estabelecimento;
-
-	@Column(nullable = false, length = 10)
-	private String numero;
-
-	@Column(length = 20)
-	private String status = "disponível";
+	@Column
+	private String nome;
 
 	@Column(columnDefinition = "text")
 	private String observacao;
+	
+	@OneToMany(mappedBy = "agrupador", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<TipoEstabelecimento> tipoEstabelecimento = new ArrayList<>();
 
 	// getters/setters
 	public Integer getId() {
 		return id;
 	}
 
+	public List<TipoEstabelecimento> getTipoEstabelecimento() {
+		return tipoEstabelecimento;
+	}
+
+	public void setTipoEstabelecimento(List<TipoEstabelecimento> tipoEstabelecimento) {
+		this.tipoEstabelecimento = tipoEstabelecimento;
+	}
+
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public Estabelecimento getEstabelecimento() {
-		return estabelecimento;
-	}
-
-	public void setEstabelecimento(Estabelecimento estabelecimento) {
-		this.estabelecimento = estabelecimento;
-	}
-
-	public String getNumero() {
-		return numero;
-	}
-
-	public void setNumero(String numero) {
-		this.numero = numero;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
 	}
 
 	public String getObservacao() {
@@ -62,5 +52,13 @@ public class Quarto {
 
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 }

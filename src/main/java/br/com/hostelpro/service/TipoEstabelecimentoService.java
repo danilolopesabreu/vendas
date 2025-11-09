@@ -32,11 +32,6 @@ public class TipoEstabelecimentoService {
         return tipoEstabelecimentoRepository.findByNome(nome);
     }
 
-    @Transactional(readOnly = true)
-    public Optional<TipoEstabelecimento> buscarPorAgrupador(String agrupador) {
-        return tipoEstabelecimentoRepository.findByAgrupador(agrupador);
-    }
-
     @Transactional
     public TipoEstabelecimento salvar(TipoEstabelecimento tipoEstabelecimento) {
         // CascadeType.ALL garante persistência automática dos estabelecimentos associados

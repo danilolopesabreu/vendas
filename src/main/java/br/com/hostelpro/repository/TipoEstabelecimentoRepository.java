@@ -12,6 +12,4 @@ public interface TipoEstabelecimentoRepository extends JpaRepository<TipoEstabel
     // Consulta adicional útil: buscar pelo nome
     Optional<TipoEstabelecimento> findByNome(String nome);
 
-    // Consulta adicional: buscar por agrupador
-    Optional<TipoEstabelecimento> findByAgrupador(String agrupador);
 }

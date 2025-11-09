@@ -12,13 +12,11 @@ import br.com.hostelpro.entity.Pedido;
 public interface PedidoMapper {
 
     @Mapping(source = "estabelecimentoId", target = "estabelecimento.id")
-    @Mapping(source = "quartoId", target = "quarto.id")
     @Mapping(source = "usuarioId", target = "usuario.id")
     @Mapping(target = "dataCriacao", defaultExpression = "java(java.time.LocalDateTime.now())")
     Pedido toEntity(PedidoDTO dto);
 
     @Mapping(source = "estabelecimento.id", target = "estabelecimentoId")
-    @Mapping(source = "quarto.id", target = "quartoId")
     @Mapping(source = "usuario.id", target = "usuarioId")
     @Mapping(target = "itens", source = "itens")
     PedidoDTO toDTO(Pedido entity);

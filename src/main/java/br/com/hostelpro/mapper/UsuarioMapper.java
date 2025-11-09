@@ -5,7 +5,7 @@ import br.com.hostelpro.entity.Usuario;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {PapelMapper.class})
 public interface UsuarioMapper {
 
     @Mapping(source = "estabelecimentoId", target = "estabelecimento.id")

@@ -22,8 +22,7 @@ public class UsuarioDTO {
 	@Size(max = 200)
 	private String senhaHash;
 
-	@Size(max = 20)
-	private String perfil;
+	private PapelDTO papel;
 
 	private Boolean ativo;
 
@@ -68,19 +67,19 @@ public class UsuarioDTO {
 		this.senhaHash = senhaHash;
 	}
 
-	public String getPerfil() {
-		return perfil;
-	}
-
-	public void setPerfil(String perfil) {
-		this.perfil = perfil;
-	}
-
 	public Boolean getAtivo() {
 		return ativo;
 	}
 
 	public void setAtivo(Boolean ativo) {
 		this.ativo = ativo;
+	}
+
+	public PapelDTO getPapel() {
+		return papel;
+	}
+
+	public void setPapel(PapelDTO papelDTO) {
+		this.papel = papelDTO;
 	}
 }

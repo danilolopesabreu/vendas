@@ -12,9 +12,11 @@ import br.com.hostelpro.entity.CategoriaProduto;
 import br.com.hostelpro.entity.Estabelecimento;
 import br.com.hostelpro.entity.Papel;
 import br.com.hostelpro.entity.Produto;
+import br.com.hostelpro.entity.TipoEstabelecimento;
 import br.com.hostelpro.repository.CategoriaProdutoRepository;
 import br.com.hostelpro.repository.EstabelecimentoRepository;
 import br.com.hostelpro.repository.ProdutoRepository;
+import br.com.hostelpro.repository.TipoEstabelecimentoRepository;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -27,7 +29,10 @@ public class EstabelecimentoReplicationService {
     private EstabelecimentoRepository estabelecimentoRepository;
 	
 	@Autowired
-	ProdutoRepository produtoRepository;
+	private ProdutoRepository produtoRepository;
+	
+	@Autowired
+	private TipoEstabelecimentoRepository tipoEstabelecimentoRepository;
 	
 	@Autowired
 	private PapelService papelService;
@@ -55,6 +60,10 @@ public class EstabelecimentoReplicationService {
         usuario.setPapel(papel);
         usuario.setEstabelecimento(novoEstabelecimento);
 
+        var tipoEstabelecimento = this.tipoEstabelecimentoRepository.findById(novoEstabelecimento.getTipoEstabelecimento().getId()).get();
+        
+        novoEstabelecimento.setTipoEstabelecimento(tipoEstabelecimento);
+        
         // 1️⃣ Persiste o novo estabelecimento
         Estabelecimento novoPersistido = estabelecimentoRepository.save(novoEstabelecimento);
 

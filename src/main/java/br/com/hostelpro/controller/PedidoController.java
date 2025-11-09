@@ -47,10 +47,10 @@ public class PedidoController {
         return ResponseEntity.ok(service.listarPorEstabelecimento(estabelecimentoId).stream().map(mapper::toDTO).collect(Collectors.toList()));
     }
     
-    @GetMapping("/estabelecimento/{estabelecimentoId}/quarto/{numeroQuarto}")
-    public ResponseEntity<List<PedidoDTO>> listarPorEstabelecimento(@PathVariable Integer estabelecimentoId, @PathVariable String numeroQuarto) {
-    	return ResponseEntity.ok(service.listarPorEstabelecimentoEQuarto(estabelecimentoId, numeroQuarto).stream().map(mapper::toDTO).collect(Collectors.toList()));
-    }
+//    @GetMapping("/estabelecimento/{estabelecimentoId}/quarto/{numeroQuarto}")
+//    public ResponseEntity<List<PedidoDTO>> listarPorEstabelecimento(@PathVariable Integer estabelecimentoId, @PathVariable String numeroQuarto) {
+//    	return ResponseEntity.ok(service.listarPorEstabelecimentoEQuarto(estabelecimentoId, numeroQuarto).stream().map(mapper::toDTO).collect(Collectors.toList()));
+//    }
 
     @PutMapping("/{id}")
     public ResponseEntity<PedidoDTO> atualizar(@PathVariable Integer id, @Valid @RequestBody PedidoDTO dto) {

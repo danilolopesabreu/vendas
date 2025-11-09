@@ -18,8 +18,8 @@ public class Pedido {
 	private Estabelecimento estabelecimento;
 
 	@ManyToOne
-	@JoinColumn(name = "quarto_id")
-	private Quarto quarto;
+	@JoinColumn(name = "agrupador_id")
+	private Agrupador agrupador;
 
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
@@ -36,11 +36,11 @@ public class Pedido {
 
 	@Column
 	private String nomeCliente;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
-	
+
 	// getters/setters
 	public Integer getId() {
 		return id;
@@ -58,12 +58,12 @@ public class Pedido {
 		this.estabelecimento = estabelecimento;
 	}
 
-	public Quarto getQuarto() {
-		return quarto;
+	public Agrupador getAgrupador() {
+		return agrupador;
 	}
 
-	public void setQuarto(Quarto quarto) {
-		this.quarto = quarto;
+	public void setAgrupador(Agrupador agrupador) {
+		this.agrupador = agrupador;
 	}
 
 	public Usuario getUsuario() {

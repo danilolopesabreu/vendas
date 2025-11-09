@@ -1,6 +1,5 @@
 package br.com.hostelpro.service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -8,12 +7,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.hostelpro.entity.Cliente;
 import br.com.hostelpro.entity.Estabelecimento;
 import br.com.hostelpro.entity.ItemPedido;
 import br.com.hostelpro.entity.Pedido;
 import br.com.hostelpro.entity.Produto;
-import br.com.hostelpro.entity.Quarto;
 import br.com.hostelpro.entity.Usuario;
 import br.com.hostelpro.exception.NotFoundException;
 import br.com.hostelpro.repository.ClienteRepository;
@@ -21,7 +18,6 @@ import br.com.hostelpro.repository.EstabelecimentoRepository;
 import br.com.hostelpro.repository.ItemPedidoRepository;
 import br.com.hostelpro.repository.PedidoRepository;
 import br.com.hostelpro.repository.ProdutoRepository;
-import br.com.hostelpro.repository.QuartoRepository;
 import br.com.hostelpro.repository.UsuarioRepository;
 
 @Service
@@ -31,8 +27,6 @@ public class PedidoService {
     private PedidoRepository pedidoRepository;
 	@Autowired
 	private EstabelecimentoRepository estabelecimentoRepository;
-	@Autowired
-	private QuartoRepository quartoRepository;
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	@Autowired
@@ -51,9 +45,9 @@ public class PedidoService {
         pedido.setEstabelecimento(est);
 
         // verifica quarto
-        Quarto quarto = quartoRepository.findById(pedido.getQuarto().getId())
-                .orElseThrow(() -> new NotFoundException("Quarto não encontrado: " + pedido.getQuarto().getId()));
-        pedido.setQuarto(quarto);
+//        Agrupador quarto = quartoRepository.findById(pedido.getQuarto().getId())
+//                .orElseThrow(() -> new NotFoundException("Quarto não encontrado: " + pedido.getQuarto().getId()));
+//        pedido.setQuarto(quarto);
 
         // verifica usuario
         Usuario usuario = usuarioRepository.findById(pedido.getUsuario().getId())
@@ -87,10 +81,10 @@ public class PedidoService {
         return pedidoRepository.findByEstabelecimentoId(estabelecimentoId);
     }
     
-    public List<Pedido> listarPorEstabelecimentoEQuarto(Integer estabelecimentoId, String numeroQuarto) {
-        List<Pedido> pedidos = pedidoRepository.findByEstabelecimentoAndOptionalQuartoWithProdutos(estabelecimentoId, numeroQuarto);
-        return pedidos;
-    }
+//    public List<Pedido> listarPorEstabelecimentoEQuarto(Integer estabelecimentoId, String numeroQuarto) {
+//        List<Pedido> pedidos = pedidoRepository.findByEstabelecimentoAndOptionalQuartoWithProdutos(estabelecimentoId, numeroQuarto);
+//        return pedidos;
+//    }
 
     public Pedido atualizar(Integer id, Pedido dados) {
         Pedido existente = buscarPorId(id);
