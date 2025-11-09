@@ -8,7 +8,8 @@ import java.math.BigDecimal;
 public class Produto {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "produto_seq")
+    @SequenceGenerator(name = "produto_seq", sequenceName = "produtos_id_seq", allocationSize = 120)
 	private Integer id;
 
 	@ManyToOne

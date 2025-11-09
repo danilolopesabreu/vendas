@@ -2,9 +2,7 @@ package br.com.hostelpro.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +10,11 @@ import org.springframework.stereotype.Service;
 
 import br.com.hostelpro.entity.CategoriaProduto;
 import br.com.hostelpro.entity.Estabelecimento;
+import br.com.hostelpro.entity.Papel;
 import br.com.hostelpro.entity.Produto;
 import br.com.hostelpro.repository.CategoriaProdutoRepository;
 import br.com.hostelpro.repository.EstabelecimentoRepository;
+import br.com.hostelpro.repository.ProdutoRepository;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -25,100 +25,114 @@ public class EstabelecimentoReplicationService {
 	
 	@Autowired
     private EstabelecimentoRepository estabelecimentoRepository;
+	
+	@Autowired
+	ProdutoRepository produtoRepository;
+	
+	@Autowired
+	private PapelService papelService;
 
     /**
      * Cria um novo estabelecimento e replica as categorias selecionadas
      * do estabelecimento modelo.
      */
-    @Transactional
+	@Transactional
     public Estabelecimento criarComCategoriasSelecionadas(Estabelecimento novoEstabelecimento) {
 
-        final Integer ID_MODELO = Estabelecimento.ID_MODELO;
+        Integer idEstabelecimentoModelo = Estabelecimento.ID_MODELO;
 
-        // 1️⃣ Extrai apenas os IDs das categorias selecionadas vindas do front
-        List<Integer> idsCategoriasSelecionadas = Optional.ofNullable(novoEstabelecimento.getCategoriaProduto())
-                .orElse(Collections.emptyList())
-                .stream()
+        // IDs das categorias selecionadas pelo usuário (somente raízes)
+        List<Integer> idsCategoriasSelecionadas = novoEstabelecimento.getCategoriaProduto().stream()
+                .filter(c -> c.getCategoriaPai() == null)
                 .map(CategoriaProduto::getId)
-                .toList();
+                .collect(Collectors.toList());
 
-        // 2️⃣ Garante que o novo estabelecimento não tenha categorias transientes
         novoEstabelecimento.setCategoriaProduto(null);
 
-        // 3️⃣ Salva o novo estabelecimento para torná-lo gerenciado
-        novoEstabelecimento.getUsuarios().get(0).setEstabelecimento(novoEstabelecimento);
-        Estabelecimento novoPersistido = estabelecimentoRepository.saveAndFlush(novoEstabelecimento);
+        var papel = this.papelService.buscarPorId(Papel.ID_MODELO).get();
+        var usuario = novoEstabelecimento.getUsuarios().get(0);
+        
+        usuario.setPapel(papel);
+        usuario.setEstabelecimento(novoEstabelecimento);
 
-        // 4️⃣ Carrega o modelo base
-        Estabelecimento modelo = estabelecimentoRepository.findById(ID_MODELO)
-                .orElseThrow(() -> new IllegalStateException("Estabelecimento modelo não encontrado."));
+        // 1️⃣ Persiste o novo estabelecimento
+        Estabelecimento novoPersistido = estabelecimentoRepository.save(novoEstabelecimento);
 
-        // 5️⃣ Filtra as categorias selecionadas que pertencem ao modelo
+        // 2️⃣ Carrega o modelo
+        Estabelecimento modelo = estabelecimentoRepository.findById(idEstabelecimentoModelo)
+                .orElseThrow(() -> new RuntimeException("Estabelecimento modelo não encontrado"));
+
+        // 3️⃣ Filtra categorias selecionadas e raízes
         List<CategoriaProduto> categoriasSelecionadas = modelo.getCategoriaProduto().stream()
+                .filter(c -> c.getCategoriaPai() == null)
                 .filter(c -> idsCategoriasSelecionadas.contains(c.getId()))
                 .collect(Collectors.toList());
 
         if (categoriasSelecionadas.isEmpty()) {
-            throw new IllegalStateException("Nenhuma categoria válida foi selecionada para clonagem.");
+            throw new RuntimeException("Nenhuma categoria encontrada para os IDs informados.");
         }
 
-        // 6️⃣ Clona recursivamente as categorias e subcategorias
-        List<CategoriaProduto> categoriasClonadas = new ArrayList<>();
-        for (CategoriaProduto categoriaOriginal : categoriasSelecionadas) {
-            CategoriaProduto copia = clonarCategoria(categoriaOriginal, novoPersistido, null);
-            categoriasClonadas.add(copia);
+        // 4️⃣ Listas para batch insert
+        List<CategoriaProduto> categoriasParaSalvar = new ArrayList<>();
+        List<Produto> produtosParaSalvar = new ArrayList<>();
+
+        // 5️⃣ Clonar categorias recursivamente
+        for (CategoriaProduto c : categoriasSelecionadas) {
+            clonarCategoriaBatch(c, novoPersistido, null, categoriasParaSalvar, produtosParaSalvar);
         }
 
-        // 7️⃣ Salva as categorias clonadas (com cascade salva filhos e produtos)
-        categoriaProdutoRepository.saveAll(categoriasClonadas);
+        // 6️⃣ Persistir tudo em batch
+        categoriaProdutoRepository.saveAll(categoriasParaSalvar);
+        produtoRepository.saveAll(produtosParaSalvar);
 
         return novoPersistido;
     }
 
-    /**
-     * Clona uma categoria e toda a sua árvore de subcategorias e produtos.
-     * Garante que todas as referências usem o Estabelecimento gerenciado.
-     */
-    private CategoriaProduto clonarCategoria(
+    private CategoriaProduto clonarCategoriaBatch(
             CategoriaProduto original,
-            Estabelecimento estabelecimentoGerenciado,
-            CategoriaProduto novaCategoriaPai) {
+            Estabelecimento novoEstabelecimento,
+            CategoriaProduto novaCategoriaPai,
+            List<CategoriaProduto> categoriasParaSalvar,
+            List<Produto> produtosParaSalvar) {
 
         CategoriaProduto copia = new CategoriaProduto();
         copia.setNome(original.getNome());
         copia.setImagem(original.getImagem());
-        copia.setEstabelecimento(estabelecimentoGerenciado);
+        copia.setEstabelecimento(novoEstabelecimento);
         copia.setCategoriaPai(novaCategoriaPai);
         copia.setCriadoEm(LocalDateTime.now());
         copia.setAtualizadoEm(LocalDateTime.now());
 
-        // Clonar subcategorias, se houver
+        categoriasParaSalvar.add(copia);
+
+        // Nó folha: clonar produtos
+        if (original.getSubcategorias() == null || original.getSubcategorias().isEmpty()) {
+            List<Produto> novosProdutos = original.getProdutos().stream().map(produtoOriginal -> {
+                Produto novoProduto = new Produto();
+                novoProduto.setNome(produtoOriginal.getNome());
+                novoProduto.setPreco(produtoOriginal.getPreco());
+                novoProduto.setDescricao(produtoOriginal.getDescricao());
+                novoProduto.setImagem(produtoOriginal.getImagem());
+                novoProduto.setEstabelecimento(novoEstabelecimento);
+                novoProduto.setCategoriaProduto(copia);
+                novoProduto.setOrigemCadastro(produtoOriginal.getOrigemCadastro());
+                novoProduto.setSituacao(produtoOriginal.getSituacao());
+                novoProduto.setQuantidadeVendida(produtoOriginal.getQuantidadeVendida());
+                return novoProduto;
+            }).collect(Collectors.toList());
+
+            produtosParaSalvar.addAll(novosProdutos);
+        }
+
+        // Clonar subcategorias recursivamente
         if (original.getSubcategorias() != null && !original.getSubcategorias().isEmpty()) {
-            List<CategoriaProduto> subcategoriasClonadas = original.getSubcategorias().stream()
-                    .map(sub -> clonarCategoria(sub, estabelecimentoGerenciado, copia))
-                    .collect(Collectors.toList());
-            copia.setSubcategorias(subcategoriasClonadas);
-        } else {
-            // Clonar produtos apenas nos nós folha
-            if (original.getProdutos() != null && !original.getProdutos().isEmpty()) {
-                List<Produto> produtosClonados = original.getProdutos().stream().map(p -> {
-                    Produto novoProduto = new Produto();
-                    novoProduto.setNome(p.getNome());
-                    novoProduto.setPreco(p.getPreco());
-                    novoProduto.setDescricao(p.getDescricao());
-                    novoProduto.setImagem(p.getImagem());
-                    novoProduto.setOrigemCadastro(p.getOrigemCadastro());
-                    novoProduto.setSituacao(p.getSituacao());
-                    novoProduto.setQuantidadeVendida(p.getQuantidadeVendida());
-                    novoProduto.setEstabelecimento(estabelecimentoGerenciado);
-                    novoProduto.setCategoriaProduto(copia);
-                    return novoProduto;
-                }).collect(Collectors.toList());
-                copia.setProdutos(produtosClonados);
+            for (CategoriaProduto sub : original.getSubcategorias()) {
+                clonarCategoriaBatch(sub, novoEstabelecimento, copia, categoriasParaSalvar, produtosParaSalvar);
             }
         }
 
         return copia;
     }
+
 
 }

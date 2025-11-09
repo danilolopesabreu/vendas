@@ -1,9 +1,19 @@
 package br.com.hostelpro.entity;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "estabelecimentos")
@@ -39,10 +49,10 @@ public class Estabelecimento {
 	@OneToMany(mappedBy = "estabelecimento", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CategoriaProduto> categoriaProduto = new ArrayList<>();
 
-	@Column
-	private int idTipoEstabelecimento;
+	@ManyToOne
+	@JoinColumn(name = "tipo_estabelecimento_id")
+	private TipoEstabelecimento tipoEstabelecimento;
 
-	// getters e setters
 	public Integer getId() {
 		return id;
 	}
@@ -99,14 +109,6 @@ public class Estabelecimento {
 		this.dataCriacao = dataCriacao;
 	}
 
-	public int getIdTipoEstabelecimento() {
-		return idTipoEstabelecimento;
-	}
-
-	public void setIdTipoEstabelecimento(int idTipoEstabelecimento) {
-		this.idTipoEstabelecimento = idTipoEstabelecimento;
-	}
-
 	public List<Usuario> getUsuarios() {
 		return usuarios;
 	}
@@ -129,7 +131,15 @@ public class Estabelecimento {
 	public String toString() {
 		return "Estabelecimento [id=" + id + ", nome=" + nome + ", cnpj=" + cnpj + ", email=" + email + ", telefone="
 				+ telefone + ", endereco=" + endereco + ", dataCriacao=" + dataCriacao + ", usuarios=" + usuarios
-				+ ", categoriaProduto=" + categoriaProduto + ", idTipoEstabelecimento=" + idTipoEstabelecimento + "]";
+				+ ", categoriaProduto=" + categoriaProduto + "]";
+	}
+
+	public TipoEstabelecimento getTipoEstabelecimento() {
+		return tipoEstabelecimento;
+	}
+
+	public void setTipoEstabelecimento(TipoEstabelecimento tipoEstabelecimento) {
+		this.tipoEstabelecimento = tipoEstabelecimento;
 	}
 
 }

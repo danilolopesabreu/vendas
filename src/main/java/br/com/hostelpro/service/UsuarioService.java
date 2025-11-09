@@ -46,7 +46,7 @@ public class UsuarioService {
         Usuario existente = buscarPorId(id);
         existente.setNome(dados.getNome());
         existente.setEmail(dados.getEmail());
-        existente.setPerfil(dados.getPerfil());
+        
         existente.setAtivo(dados.getAtivo());
         // não atualiza senha aqui (método separado poderia fazer isso)
         Usuario salvo = repository.save(existente);

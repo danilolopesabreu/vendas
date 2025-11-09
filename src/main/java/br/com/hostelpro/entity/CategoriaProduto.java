@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,14 +15,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "categoria_produto")
 public class CategoriaProduto {
+	
+	private static final int batchSize = 120;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "categoria_seq")
+    @SequenceGenerator(name = "categoria_seq", sequenceName = "categoria_produto_id_seq", allocationSize = batchSize)
 	private Integer id;
 
 	@ManyToOne
@@ -34,7 +40,7 @@ public class CategoriaProduto {
 	@JoinColumn(name = "categoria_pai_id")
 	private CategoriaProduto categoriaPai;
 	
-	@OneToMany(mappedBy = "categoriaPai", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "categoriaPai", orphanRemoval = true)
 	private List<CategoriaProduto> subcategorias = new ArrayList<>();
 
 	@Column(name = "criado_em")

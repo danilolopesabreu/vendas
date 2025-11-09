@@ -23,8 +23,9 @@ public class Usuario {
 	@Column(name = "senha_hash", nullable = true, length = 200)
 	private String senhaHash;
 
-	@Column(length = 20, nullable = false)
-	private String perfil;
+	@ManyToOne
+	@JoinColumn(name = "papel_id")
+	private Papel papel;
 
 	@Column(nullable = false)
 	private Boolean ativo = true;
@@ -70,19 +71,19 @@ public class Usuario {
 		this.senhaHash = senhaHash;
 	}
 
-	public String getPerfil() {
-		return perfil;
-	}
-
-	public void setPerfil(String perfil) {
-		this.perfil = perfil;
-	}
-
 	public Boolean getAtivo() {
 		return ativo;
 	}
 
 	public void setAtivo(Boolean ativo) {
 		this.ativo = ativo;
+	}
+
+	public Papel getPapel() {
+		return papel;
+	}
+
+	public void setPapel(Papel papel) {
+		this.papel = papel;
 	}
 }
