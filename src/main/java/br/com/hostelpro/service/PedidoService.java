@@ -10,13 +10,14 @@ import org.springframework.stereotype.Service;
 import br.com.hostelpro.entity.Estabelecimento;
 import br.com.hostelpro.entity.ItemPedido;
 import br.com.hostelpro.entity.Pedido;
-import br.com.hostelpro.entity.Produto;
+import br.com.hostelpro.entity.ProdutoEstabelecimento;
 import br.com.hostelpro.entity.Usuario;
 import br.com.hostelpro.exception.NotFoundException;
 import br.com.hostelpro.repository.ClienteRepository;
 import br.com.hostelpro.repository.EstabelecimentoRepository;
 import br.com.hostelpro.repository.ItemPedidoRepository;
 import br.com.hostelpro.repository.PedidoRepository;
+import br.com.hostelpro.repository.ProdutoEstabelecimentoRepository;
 import br.com.hostelpro.repository.ProdutoRepository;
 import br.com.hostelpro.repository.UsuarioRepository;
 
@@ -35,6 +36,9 @@ public class PedidoService {
 	private ClienteRepository clienteRepository;
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
+	
+	@Autowired
+	private ProdutoEstabelecimentoRepository produtoEstabelecimentoRepository; 
     
 	private Logger logger = LoggerFactory.getLogger(PedidoService.class);
 
@@ -58,12 +62,12 @@ public class PedidoService {
         if (pedido.getItens() != null) {
             for (ItemPedido item : pedido.getItens()) {
               
-            	Produto produto = produtoRepository.findById(item.getProduto().getId())
-                        .orElseThrow(() -> new NotFoundException("Produto não encontrado: " + item.getProduto().getId()));
+            	ProdutoEstabelecimento produtoEstabelecimento = produtoEstabelecimentoRepository.findById(item.getProdutoEstabelecimento().getId())
+                        .orElseThrow(() -> new NotFoundException("Produto não encontrado: " + item.getProdutoEstabelecimento().getId()));
                 
-            	produto.setQuantidadeVendida(produto.getQuantidadeVendida() + item.getQuantidade());
+            	produtoEstabelecimento.setQuantidadeVendida(produtoEstabelecimento.getQuantidadeVendida() + item.getQuantidade());
             	
-                item.setProduto(produto);
+                item.setProdutoEstabelecimento(produtoEstabelecimento);
                 
             }
         }

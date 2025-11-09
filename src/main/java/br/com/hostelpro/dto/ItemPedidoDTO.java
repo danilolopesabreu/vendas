@@ -1,8 +1,9 @@
 package br.com.hostelpro.dto;
 
+import java.math.BigDecimal;
+
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import java.math.BigDecimal;
 
 public class ItemPedidoDTO {
 	private Integer id;
@@ -20,7 +21,7 @@ public class ItemPedidoDTO {
 	@NotNull
 	private BigDecimal precoTotal;
 
-	private ProdutoDTO produto;
+	private ProdutoEstabelecimentoDTO produtoEstabelecimento;
 
 	public Integer getId() {
 		return id;
@@ -62,12 +63,12 @@ public class ItemPedidoDTO {
 		this.precoTotal = precoTotal;
 	}
 
-	public ProdutoDTO getProduto() {
-		return produto;
+	public ProdutoEstabelecimentoDTO getProdutoEstabelecimento() {
+		return produtoEstabelecimento;
 	}
 
-	public void setProduto(ProdutoDTO produto) {
-		this.produto = produto;
+	public void setProdutoEstabelecimento(ProdutoEstabelecimentoDTO produtoEstabelecimento) {
+		this.produtoEstabelecimento = produtoEstabelecimento;
 	}
 
 }

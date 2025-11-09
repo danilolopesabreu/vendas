@@ -49,6 +49,9 @@ public class Estabelecimento {
 	@OneToMany(mappedBy = "estabelecimento", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CategoriaProduto> categoriaProduto = new ArrayList<>();
 
+	@OneToMany(mappedBy = "estabelecimento", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ProdutoEstabelecimento> produtoEstabelecimento = new ArrayList<>();
+
 	@ManyToOne
 	@JoinColumn(name = "tipo_estabelecimento_id")
 	private TipoEstabelecimento tipoEstabelecimento;
@@ -140,6 +143,14 @@ public class Estabelecimento {
 
 	public void setTipoEstabelecimento(TipoEstabelecimento tipoEstabelecimento) {
 		this.tipoEstabelecimento = tipoEstabelecimento;
+	}
+
+	public List<ProdutoEstabelecimento> getProdutoEstabelecimento() {
+		return produtoEstabelecimento;
+	}
+
+	public void setProdutoEstabelecimento(List<ProdutoEstabelecimento> produtoEstabelecimento) {
+		this.produtoEstabelecimento = produtoEstabelecimento;
 	}
 
 }

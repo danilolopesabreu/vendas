@@ -24,8 +24,8 @@ public class ItemPedido {
 	private Pedido pedido;
 
 	@ManyToOne
-	@JoinColumn(name = "produto_id")
-	private Produto produto;
+	@JoinColumn(name = "produto_estabelecimento_id")
+	private ProdutoEstabelecimento produtoEstabelecimento;
 
 	@Column(nullable = false)
 	private Integer quantidade = 1;
@@ -53,14 +53,6 @@ public class ItemPedido {
 		this.pedido = pedido;
 	}
 
-	public Produto getProduto() {
-		return produto;
-	}
-
-	public void setProduto(Produto produto) {
-		this.produto = produto;
-	}
-
 	public Integer getQuantidade() {
 		return quantidade;
 	}
@@ -83,6 +75,14 @@ public class ItemPedido {
 
 	public void setPrecoTotal(java.math.BigDecimal precoTotal) {
 		this.precoTotal = precoTotal;
+	}
+
+	public ProdutoEstabelecimento getProdutoEstabelecimento() {
+		return produtoEstabelecimento;
+	}
+
+	public void setProdutoEstabelecimento(ProdutoEstabelecimento produtoEstabelecimento) {
+		this.produtoEstabelecimento = produtoEstabelecimento;
 	}
 
 }
