@@ -1,4 +1,6 @@
 package br.com.hostelpro.mapper;
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -15,4 +17,7 @@ public interface ItensAgrupadosMapper {
     @Mapping(source = "estabelecimentoId", target = "estabelecimento.id")
     @Mapping(source = "tipoEstabelecimentoId", target = "tipoEstabelecimento.id")
     ItensAgrupados toEntity(ItensAgrupadosDTO dto);
+    
+    List<ItensAgrupadosDTO> toDTOList(List<ItensAgrupados> entities);
+    List<ItensAgrupados> toEntityList(List<ItensAgrupadosDTO> dtos);
 }

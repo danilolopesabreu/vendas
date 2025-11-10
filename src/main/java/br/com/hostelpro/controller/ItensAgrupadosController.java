@@ -43,6 +43,13 @@ public class ItensAgrupadosController {
         return mapper.toDTO(salvo);
     }
 
+    @PostMapping("/lista")
+    public List<ItensAgrupadosDTO> criarByList(@RequestBody List<ItensAgrupadosDTO> dto) {
+    	List<ItensAgrupados> entity = mapper.toEntityList(dto);
+    	List<ItensAgrupados> salvo = service.salvarLista(entity);
+    	return mapper.toDTOList(salvo);
+    }
+
     @PutMapping("/{id}")
     public ItensAgrupadosDTO atualizar(@PathVariable Integer id, @RequestBody ItensAgrupadosDTO dto) {
         ItensAgrupados entity = mapper.toEntity(dto);
