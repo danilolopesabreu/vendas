@@ -44,6 +44,11 @@ public class UsuarioController {
         return ResponseEntity.ok(mapper.toDTO(service.buscarPorId(id)));
     }
 
+    @PostMapping("/email")
+    public ResponseEntity<UsuarioDTO> getByEmail(@RequestBody UsuarioDTO usuarioDTO) {
+    	return ResponseEntity.ok(mapper.toDTO(service.buscarPorEmailComRelacionamentos(usuarioDTO.getEmail())));
+    }
+
     @GetMapping
     public ResponseEntity<List<UsuarioDTO>> listar() {
         return ResponseEntity.ok(service.listarTodos().stream().map(mapper::toDTO).collect(Collectors.toList()));

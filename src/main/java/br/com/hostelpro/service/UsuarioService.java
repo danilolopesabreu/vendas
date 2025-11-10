@@ -37,6 +37,10 @@ public class UsuarioService {
     public Usuario buscarPorId(Integer id) {
         return repository.findById(id).orElseThrow(() -> new NotFoundException("Usuário não encontrado: " + id));
     }
+    
+    public Usuario buscarPorEmailComRelacionamentos(String email) {
+    	return repository.findByEmailComRelacionamentos(email).orElseThrow(() -> new NotFoundException("Usuário não encontrado: " + email));
+    }
 
     public List<Usuario> listarTodos() {
         return repository.findAll();

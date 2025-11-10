@@ -1,35 +1,56 @@
 package br.com.hostelpro.controller;
 
-import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import br.com.hostelpro.dto.ProdutoEstabelecimentoDTO;
+import br.com.hostelpro.entity.ProdutoEstabelecimento;
+import br.com.hostelpro.mapper.ProdutoEstabelecimentoMapper;
 import br.com.hostelpro.service.ProdutoEstabelecimentoService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/produtos-estabelecimento")
 public class ProdutoEstabelecimentoController {
 
     private final ProdutoEstabelecimentoService service;
+    private final ProdutoEstabelecimentoMapper mapper;
 
-    public ProdutoEstabelecimentoController(ProdutoEstabelecimentoService service) {
+    public ProdutoEstabelecimentoController(ProdutoEstabelecimentoService service,
+                                            ProdutoEstabelecimentoMapper mapper) {
         this.service = service;
+        this.mapper = mapper;
     }
 
     @GetMapping("/estabelecimento/{id}")
     public List<ProdutoEstabelecimentoDTO> listarPorEstabelecimento(@PathVariable Integer id) {
-        return service.listarPorEstabelecimento(id);
+        return service.listarPorEstabelecimento(id)
+                      .stream()
+                      .map(mapper::toDTO)
+                      .collect(Collectors.toList());
     }
 
     @PostMapping
     public ProdutoEstabelecimentoDTO criar(@RequestBody ProdutoEstabelecimentoDTO dto) {
-        return service.salvar(dto);
+        ProdutoEstabelecimento entity = mapper.toEntity(dto);
+        ProdutoEstabelecimento salvo = service.salvar(entity);
+        return mapper.toDTO(salvo);
     }
 
     @PutMapping("/{id}")
-    public ProdutoEstabelecimentoDTO atualizar(@PathVariable Integer id, @RequestBody ProdutoEstabelecimentoDTO dto) {
-        return service.atualizar(id, dto);
+    public ProdutoEstabelecimentoDTO atualizar(@PathVariable Integer id,
+                                               @RequestBody ProdutoEstabelecimentoDTO dto) {
+        ProdutoEstabelecimento entity = mapper.toEntity(dto);
+        ProdutoEstabelecimento atualizado = service.atualizar(id, entity);
+        return mapper.toDTO(atualizado);
     }
 
     @DeleteMapping("/{id}")

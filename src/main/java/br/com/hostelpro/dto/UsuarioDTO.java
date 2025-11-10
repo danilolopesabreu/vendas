@@ -8,7 +8,7 @@ public class UsuarioDTO {
 	private Integer id;
 
 	private Integer estabelecimentoId;
-
+	
 	@NotBlank
 	@Size(max = 100)
 	private String nome;
@@ -82,4 +82,5 @@ public class UsuarioDTO {
 	public void setPapel(PapelDTO papelDTO) {
 		this.papel = papelDTO;
 	}
+
 }

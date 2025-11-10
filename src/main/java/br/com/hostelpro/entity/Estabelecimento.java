@@ -51,6 +51,9 @@ public class Estabelecimento {
 
 	@OneToMany(mappedBy = "estabelecimento", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ProdutoEstabelecimento> produtoEstabelecimento = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "estabelecimento", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ItensAgrupados> itensAgrupados = new ArrayList<>();
 
 	@ManyToOne
 	@JoinColumn(name = "tipo_estabelecimento_id")
@@ -151,6 +154,14 @@ public class Estabelecimento {
 
 	public void setProdutoEstabelecimento(List<ProdutoEstabelecimento> produtoEstabelecimento) {
 		this.produtoEstabelecimento = produtoEstabelecimento;
+	}
+
+	public List<ItensAgrupados> getItensAgrupados() {
+		return itensAgrupados;
+	}
+
+	public void setItensAgrupados(List<ItensAgrupados> itensAgrupados) {
+		this.itensAgrupados = itensAgrupados;
 	}
 
 }

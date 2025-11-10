@@ -5,8 +5,7 @@ import org.mapstruct.Mapper;
 import br.com.hostelpro.dto.EstabelecimentoDTO;
 import br.com.hostelpro.entity.Estabelecimento;
 
-@Mapper(componentModel = "spring", uses = { UsuarioMapper.class, CategoriaProdutoMapper.class,
-		TipoEstabelecimentoMapper.class })
+@Mapper(componentModel = "spring", uses = { UsuarioMapper.class, CategoriaProdutoMapper.class, TipoEstabelecimentoMapper.class })
 public interface EstabelecimentoMapper {
 	
 	Estabelecimento toEntity(EstabelecimentoDTO dto);

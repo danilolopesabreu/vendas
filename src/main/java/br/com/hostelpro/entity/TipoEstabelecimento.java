@@ -33,6 +33,9 @@ public class TipoEstabelecimento {
 	
 	@OneToMany(mappedBy = "tipoEstabelecimento", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Estabelecimento> estabelecimentos = new ArrayList<>();
+
+	@OneToMany(mappedBy = "tipoEstabelecimento", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ItensAgrupados> itensAgrupados = new ArrayList<>();
 	
 	public Integer getId() {
 		return id;
@@ -64,6 +67,14 @@ public class TipoEstabelecimento {
 
 	public void setAgrupador(Agrupador agrupador) {
 		this.agrupador = agrupador;
+	}
+
+	public List<ItensAgrupados> getItensAgrupados() {
+		return itensAgrupados;
+	}
+
+	public void setItensAgrupados(List<ItensAgrupados> itensAgrupados) {
+		this.itensAgrupados = itensAgrupados;
 	}
 
 }
