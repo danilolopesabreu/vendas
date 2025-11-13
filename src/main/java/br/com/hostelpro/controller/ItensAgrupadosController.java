@@ -64,7 +64,7 @@ public class ItensAgrupadosController {
 
     @GetMapping("/{id}")
     public ItensAgrupadosDTO buscarPorId(@PathVariable Integer id) {
-        ItensAgrupados entity = service.buscarPorId(id);
+        ItensAgrupados entity = service.findById(id);
         return mapper.toDTO(entity);
     }
 }

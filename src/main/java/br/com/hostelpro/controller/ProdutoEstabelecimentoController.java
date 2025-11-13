@@ -32,10 +32,18 @@ public class ProdutoEstabelecimentoController {
 
     @GetMapping("/estabelecimento/{id}")
     public List<ProdutoEstabelecimentoDTO> listarPorEstabelecimento(@PathVariable Integer id) {
-        return service.listarPorEstabelecimento(id)
+        return service.listarProdutosMaisVendidosPorEstabelecimento(id)
                       .stream()
                       .map(mapper::toDTO)
                       .collect(Collectors.toList());
+    }
+
+    @GetMapping("/estabelecimento/{id}/maisvendidos")
+    public List<ProdutoEstabelecimentoDTO> listarProdutosMaisVendidosPorEstabelecimento(@PathVariable Integer id) {
+    	return service.listarProdutosMaisVendidosPorEstabelecimento(id)
+    			.stream()
+    			.map(mapper::toDTO)
+    			.collect(Collectors.toList());
     }
 
     @PostMapping

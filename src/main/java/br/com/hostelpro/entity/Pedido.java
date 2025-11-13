@@ -1,9 +1,19 @@
 package br.com.hostelpro.entity;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "pedidos")
@@ -18,8 +28,8 @@ public class Pedido {
 	private Estabelecimento estabelecimento;
 
 	@ManyToOne
-	@JoinColumn(name = "agrupador_id")
-	private Agrupador agrupador;
+	@JoinColumn(name = "item_agrupado_id")
+	private ItensAgrupados itensAgrupados;
 
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
@@ -40,6 +50,9 @@ public class Pedido {
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
+	
+	@Column
+	private String numeroDoPedido;
 
 	// getters/setters
 	public Integer getId() {
@@ -56,14 +69,6 @@ public class Pedido {
 
 	public void setEstabelecimento(Estabelecimento estabelecimento) {
 		this.estabelecimento = estabelecimento;
-	}
-
-	public Agrupador getAgrupador() {
-		return agrupador;
-	}
-
-	public void setAgrupador(Agrupador agrupador) {
-		this.agrupador = agrupador;
 	}
 
 	public Usuario getUsuario() {
@@ -120,5 +125,21 @@ public class Pedido {
 
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
+	}
+
+	public String getNumeroDoPedido() {
+		return numeroDoPedido;
+	}
+
+	public void setNumeroDoPedido(String numeroDoPedido) {
+		this.numeroDoPedido = numeroDoPedido;
+	}
+
+	public ItensAgrupados getItensAgrupados() {
+		return itensAgrupados;
+	}
+
+	public void setItensAgrupados(ItensAgrupados itensAgrupados) {
+		this.itensAgrupados = itensAgrupados;
 	}
 }

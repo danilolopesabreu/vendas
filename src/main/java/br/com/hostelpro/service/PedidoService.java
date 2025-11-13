@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.hostelpro.entity.Estabelecimento;
 import br.com.hostelpro.entity.ItemPedido;
+import br.com.hostelpro.entity.ItensAgrupados;
 import br.com.hostelpro.entity.Pedido;
 import br.com.hostelpro.entity.ProdutoEstabelecimento;
 import br.com.hostelpro.entity.Usuario;
@@ -36,6 +37,8 @@ public class PedidoService {
 	private ClienteRepository clienteRepository;
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
+	@Autowired
+	private ItensAgrupadosService itensAgrupadosService;
 	
 	@Autowired
 	private ProdutoEstabelecimentoRepository produtoEstabelecimentoRepository; 
@@ -57,6 +60,11 @@ public class PedidoService {
         Usuario usuario = usuarioRepository.findById(pedido.getUsuario().getId())
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado: " + pedido.getUsuario().getId()));
         pedido.setUsuario(usuario);
+
+        if(!pedido.getEstabelecimento().getTipoEstabelecimento().getAgrupador().getNome().equals("pedido")) {
+        	ItensAgrupados itensAgrupados = itensAgrupadosService.findById(pedido.getItensAgrupados().getId());
+        	pedido.setItensAgrupados(itensAgrupados);
+        }
 
         // Para cada item: validar produto e calcular total
         if (pedido.getItens() != null) {

@@ -71,7 +71,7 @@ public class ItensAgrupadosService {
         itensAgrupadosRepository.deleteById(id);
     }
 
-    public ItensAgrupados buscarPorId(Integer id) {
+    public ItensAgrupados findById(Integer id) {
         return itensAgrupadosRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Item não encontrado"));
     }

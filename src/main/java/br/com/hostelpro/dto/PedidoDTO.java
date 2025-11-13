@@ -12,9 +12,6 @@ public class PedidoDTO {
 	private Integer estabelecimentoId;
 
 	@NotNull
-	private Integer quartoId;
-
-	@NotNull
 	private Integer usuarioId;
 
 	private LocalDateTime dataCriacao;
@@ -26,6 +23,10 @@ public class PedidoDTO {
 	private String nomeCliente;
 	
 	private Integer clienteId;
+	
+	private String numeroDoPedido;
+	
+	private ItensAgrupadosDTO itensAgrupados;
 	
 	public Integer getId() {
 		return id;
@@ -41,14 +42,6 @@ public class PedidoDTO {
 
 	public void setEstabelecimentoId(Integer estabelecimentoId) {
 		this.estabelecimentoId = estabelecimentoId;
-	}
-
-	public Integer getQuartoId() {
-		return quartoId;
-	}
-
-	public void setQuartoId(Integer quartoId) {
-		this.quartoId = quartoId;
 	}
 
 	public Integer getUsuarioId() {
@@ -97,6 +90,22 @@ public class PedidoDTO {
 
 	public void setClienteId(Integer clienteId) {
 		this.clienteId = clienteId;
+	}
+
+	public ItensAgrupadosDTO getItensAgrupados() {
+		return itensAgrupados;
+	}
+
+	public void setItensAgrupados(ItensAgrupadosDTO itensAgrupados) {
+		this.itensAgrupados = itensAgrupados;
+	}
+
+	public String getNumeroDoPedido() {
+		return numeroDoPedido;
+	}
+
+	public void setNumeroDoPedido(String numeroDoPedido) {
+		this.numeroDoPedido = numeroDoPedido;
 	}
 
 }

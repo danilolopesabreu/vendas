@@ -30,6 +30,8 @@ public class EstabelecimentoDTO {
 	
 	private TipoEstabelecimentoDTO tipoEstabelecimento;
 
+	private List<ItensAgrupadosDTO> itensAgrupados;
+	
 	// getters/setters
 	public Integer getId() {
 		return id;
@@ -101,5 +103,13 @@ public class EstabelecimentoDTO {
 
 	public void setTipoEstabelecimento(TipoEstabelecimentoDTO tipoEstabelecimento) {
 		this.tipoEstabelecimento = tipoEstabelecimento;
+	}
+
+	public List<ItensAgrupadosDTO> getItensAgrupados() {
+		return itensAgrupados;
+	}
+
+	public void setItensAgrupados(List<ItensAgrupadosDTO> itensAgrupados) {
+		this.itensAgrupados = itensAgrupados;
 	}
 }

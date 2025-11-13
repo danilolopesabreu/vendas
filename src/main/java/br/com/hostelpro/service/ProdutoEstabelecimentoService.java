@@ -15,7 +15,7 @@ public class ProdutoEstabelecimentoService {
         this.produtoEstabelecimentoRepository = repository;
     }
 
-    public List<ProdutoEstabelecimento> listarPorEstabelecimento(Integer estabelecimentoId) {
+    public List<ProdutoEstabelecimento> listarProdutosMaisVendidosPorEstabelecimento(Integer estabelecimentoId) {
         return produtoEstabelecimentoRepository.findByEstabelecimentoIdOrderByQuantidadeVendidaDescNomeAsc(estabelecimentoId);
     }
 
