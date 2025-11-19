@@ -14,6 +14,6 @@ public interface ProdutoEstabelecimentoRepository extends JpaRepository<ProdutoE
     List<ProdutoEstabelecimento> findByEstabelecimentoId(Integer estabelecimentoId);
     
     @EntityGraph(attributePaths = {})
-    List<ProdutoEstabelecimento> findByEstabelecimentoIdOrderByQuantidadeVendidaDescNomeAsc(Integer estabelecimentoId);
+    List<ProdutoEstabelecimento> findByEstabelecimentoIdOrderByRelevanciaDescQuantidadeVendidaDescNomeAsc(Integer estabelecimentoId);
 
 }

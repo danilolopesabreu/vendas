@@ -3,6 +3,7 @@ package br.com.hostelpro.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.hostelpro.enumeradores.TipoEstabelecimentoEnum;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -75,6 +76,10 @@ public class TipoEstabelecimento {
 
 	public void setItensAgrupados(List<ItensAgrupados> itensAgrupados) {
 		this.itensAgrupados = itensAgrupados;
+	}
+	
+	public TipoEstabelecimentoEnum getTipoEstabelecimentoEnum() {
+		return TipoEstabelecimentoEnum.fromCodigo(this.id);
 	}
 
 }

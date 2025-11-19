@@ -57,6 +57,9 @@ public class ProdutoEstabelecimento {
     @Column(nullable = false)
     private LocalDateTime atualizadoEm = LocalDateTime.now();
 
+    @Column
+    private Integer relevancia;
+    
     // Getters e Setters
     public Integer getId() {
         return id;
@@ -168,5 +171,17 @@ public class ProdutoEstabelecimento {
 
     public void setAtualizadoEm(LocalDateTime atualizadoEm) {
         this.atualizadoEm = atualizadoEm;
+    }
+
+	public Integer getRelevancia() {
+		return relevancia;
+	}
+
+	public void setRelevancia(Integer relevancia) {
+		this.relevancia = relevancia;
+	}
+	
+	public boolean isAtivo() {
+        return "ativo".equalsIgnoreCase(situacao);
     }
 }

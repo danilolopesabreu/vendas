@@ -34,6 +34,9 @@ public class EstabelecimentoReplicationService {
 	private TipoEstabelecimentoRepository tipoEstabelecimentoRepository;
 	
 	@Autowired
+	private RelevanciaService relevanciaService;
+	
+	@Autowired
 	private PapelService papelService;
 
     /**
@@ -90,6 +93,7 @@ public class EstabelecimentoReplicationService {
 
 	    // 6️⃣ Persistir tudo em batch
 	    categoriaProdutoRepository.saveAll(categoriasParaSalvar);
+	    relevanciaService.calcularRelevanciaParaLista(produtosEstabelecimentoParaSalvar);
 	    produtoEstabelecimentoRepository.saveAll(produtosEstabelecimentoParaSalvar);
 
 	    return novoPersistido;

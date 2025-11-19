@@ -16,7 +16,7 @@ public class ProdutoEstabelecimentoService {
     }
 
     public List<ProdutoEstabelecimento> listarProdutosMaisVendidosPorEstabelecimento(Integer estabelecimentoId) {
-        return produtoEstabelecimentoRepository.findByEstabelecimentoIdOrderByQuantidadeVendidaDescNomeAsc(estabelecimentoId);
+        return produtoEstabelecimentoRepository.findByEstabelecimentoIdOrderByRelevanciaDescQuantidadeVendidaDescNomeAsc(estabelecimentoId);
     }
 
     public ProdutoEstabelecimento salvar(ProdutoEstabelecimento entity) {

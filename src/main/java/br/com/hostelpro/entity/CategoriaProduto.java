@@ -4,8 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Value;
-
+import br.com.hostelpro.enumeradores.CategoriaProdutoEnum;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,12 +20,12 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "categoria_produto")
 public class CategoriaProduto {
-	
+
 	private static final int batchSize = 120;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "categoria_seq")
-    @SequenceGenerator(name = "categoria_seq", sequenceName = "categoria_produto_id_seq", allocationSize = batchSize)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "categoria_seq")
+	@SequenceGenerator(name = "categoria_seq", sequenceName = "categoria_produto_id_seq", allocationSize = batchSize)
 	private Integer id;
 
 	@ManyToOne
@@ -39,7 +38,7 @@ public class CategoriaProduto {
 	@ManyToOne
 	@JoinColumn(name = "categoria_pai_id")
 	private CategoriaProduto categoriaPai;
-	
+
 	@OneToMany(mappedBy = "categoriaPai", orphanRemoval = true)
 	private List<CategoriaProduto> subcategorias = new ArrayList<>();
 
@@ -48,20 +47,20 @@ public class CategoriaProduto {
 
 	@Column(name = "atualizado_em")
 	private LocalDateTime atualizadoEm = LocalDateTime.now();
-	
+
 	@Column
 	private String imagem;
-	
+
 	@OneToMany(mappedBy = "categoriaProduto", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Produto> produtos;
 
 	public CategoriaProduto() {
 	}
-	
+
 	public CategoriaProduto(Integer id) {
-	    this.id = id;
+		this.id = id;
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}
@@ -127,12 +126,16 @@ public class CategoriaProduto {
 	}
 
 	public List<Produto> getProdutos() {
-		if(produtos == null)
+		if (produtos == null)
 			produtos = new ArrayList<>();
 		return produtos;
 	}
 
 	public void setProdutos(List<Produto> produtos) {
 		this.produtos = produtos;
+	}
+
+	public CategoriaProdutoEnum getCategoriaEnum() {
+		return CategoriaProdutoEnum.fromNome(this.nome);
 	}
 }

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.hostelpro.enumeradores.TipoEstabelecimentoEnum;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -51,7 +52,7 @@ public class Estabelecimento {
 
 	@OneToMany(mappedBy = "estabelecimento", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ProdutoEstabelecimento> produtoEstabelecimento = new ArrayList<>();
-	
+
 	@OneToMany(mappedBy = "estabelecimento", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ItensAgrupados> itensAgrupados = new ArrayList<>();
 
