@@ -39,7 +39,7 @@ public class Pedido {
 	private LocalDateTime dataCriacao = LocalDateTime.now();
 
 	@Column(length = 20)
-	private String status = "aberto";
+	private String status = "aberto";//aberto, fechado, pendente, cancelado
 
 	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ItemPedido> itens = new ArrayList<>();
@@ -53,7 +53,7 @@ public class Pedido {
 	
 	@Column
 	private String numeroDoPedido;
-
+	
 	// getters/setters
 	public Integer getId() {
 		return id;
@@ -142,4 +142,5 @@ public class Pedido {
 	public void setItensAgrupados(ItensAgrupados itensAgrupados) {
 		this.itensAgrupados = itensAgrupados;
 	}
+
 }

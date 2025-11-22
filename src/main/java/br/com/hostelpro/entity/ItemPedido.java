@@ -36,6 +36,9 @@ public class ItemPedido {
 	@Column(name = "preco_total", nullable = false, precision = 10, scale = 2)
 	private BigDecimal precoTotal;
 
+	@Column
+	private String status = "aberto";// aberto, fechado, pendente, cancelado
+
 	// getters/setters
 	public Integer getId() {
 		return id;
@@ -83,6 +86,14 @@ public class ItemPedido {
 
 	public void setProdutoEstabelecimento(ProdutoEstabelecimento produtoEstabelecimento) {
 		this.produtoEstabelecimento = produtoEstabelecimento;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

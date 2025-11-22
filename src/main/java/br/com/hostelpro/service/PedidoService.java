@@ -1,6 +1,8 @@
 package br.com.hostelpro.service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +71,9 @@ public class PedidoService {
         // Para cada item: validar produto e calcular total
         if (pedido.getItens() != null) {
             for (ItemPedido item : pedido.getItens()) {
-              
+            	
+            	item.setStatus("aberto");
+            	
             	ProdutoEstabelecimento produtoEstabelecimento = produtoEstabelecimentoRepository.findById(item.getProdutoEstabelecimento().getId())
                         .orElseThrow(() -> new NotFoundException("Produto não encontrado: " + item.getProdutoEstabelecimento().getId()));
                 
@@ -79,7 +83,7 @@ public class PedidoService {
                 
             }
         }
-
+        pedido.setStatus("aberto");
         Pedido salvo = pedidoRepository.save(pedido); // cascades items
         logger.info("Pedido criado id={}", salvo.getId());
         return salvo;
@@ -92,12 +96,52 @@ public class PedidoService {
     public List<Pedido> listarPorEstabelecimento(Integer estabelecimentoId) {
         return pedidoRepository.findByEstabelecimentoId(estabelecimentoId);
     }
+
+    public List<Pedido> listarPorEstabelecimentoOrderDataCriacaoStatusOrdenado(Integer estabelecimentoId) {
+    	return pedidoRepository.listarPorEstabelecimentoOrderDataCriacaoStatusOrdenado(estabelecimentoId);
+    }
     
 //    public List<Pedido> listarPorEstabelecimentoEQuarto(Integer estabelecimentoId, String numeroQuarto) {
 //        List<Pedido> pedidos = pedidoRepository.findByEstabelecimentoAndOptionalQuartoWithProdutos(estabelecimentoId, numeroQuarto);
 //        return pedidos;
 //    }
 
+    public Pedido atualizar(Pedido dados) {
+    	
+    	Pedido pedido = buscarPorId(dados.getId());
+    	pedido.setStatus(dados.getStatus());
+    	
+    	Map<Integer, ItemPedido> itensMap = pedido.getItens().stream()
+    	        .collect(Collectors.toMap(ItemPedido::getId, i -> i));
+    	
+    	for (ItemPedido umItem : dados.getItens()) {
+    	    if (umItem.getId() != null && itensMap.containsKey(umItem.getId())) {
+    	        // Atualizar item existente
+    	        ItemPedido item = itensMap.get(umItem.getId());
+    	        item.setQuantidade(umItem.getQuantidade());
+    	        item.setPrecoUnitario(umItem.getPrecoUnitario());
+    	        item.setPrecoTotal(umItem.getPrecoTotal());
+    	        item.setStatus(umItem.getStatus());
+    	    } else {
+    	        // Novo item
+    	        ItemPedido novoItem = new ItemPedido();
+    	        novoItem.setPedido(pedido);
+    	        novoItem.setProdutoEstabelecimento(umItem.getProdutoEstabelecimento());
+    	        novoItem.setQuantidade(umItem.getQuantidade());
+    	        novoItem.setPrecoUnitario(umItem.getPrecoUnitario());
+    	        novoItem.setPrecoTotal(umItem.getPrecoTotal());
+    	        novoItem.setStatus(umItem.getStatus());
+    	        pedido.getItens().add(novoItem);
+    	    }
+    	}
+    	
+    	Pedido salvo = pedidoRepository.save(pedido);
+    	
+    	logger.info("Pedido atualizado id={}", salvo.getId());
+    	
+    	return salvo;
+    }
+    
     public Pedido atualizar(Integer id, Pedido dados) {
         Pedido existente = buscarPorId(id);
         existente.setStatus(dados.getStatus());
@@ -110,5 +154,11 @@ public class PedidoService {
         if (!pedidoRepository.existsById(id)) throw new NotFoundException("Pedido não encontrado: " + id);
         pedidoRepository.deleteById(id);
         logger.info("Pedido deletado id={}", id);
+    }
+    
+    public void deletarItemPedido(Integer id) {
+    	if (!itemPedidoRepository.existsById(id)) throw new NotFoundException("ItemPedido não encontrado: " + id);
+    	itemPedidoRepository.deleteById(id);
+    	logger.info("ItemPedido deletado id={}", id);
     }
 }
