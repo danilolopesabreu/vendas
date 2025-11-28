@@ -22,6 +22,8 @@ public class ItemPedidoDTO {
 	private BigDecimal precoTotal;
 
 	private ProdutoEstabelecimentoDTO produtoEstabelecimento;
+	
+	private String status;
 
 	public Integer getId() {
 		return id;
@@ -69,6 +71,14 @@ public class ItemPedidoDTO {
 
 	public void setProdutoEstabelecimento(ProdutoEstabelecimentoDTO produtoEstabelecimento) {
 		this.produtoEstabelecimento = produtoEstabelecimento;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

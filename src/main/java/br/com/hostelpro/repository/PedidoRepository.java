@@ -21,4 +21,18 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
 //			""")
 //	List<Pedido> findByEstabelecimentoAndOptionalQuartoWithProdutos(@Param("estabelecimentoId") Integer estabelecimentoId, @Param("numeroQuarto") String numeroQuarto);
 
+    @Query("""
+            SELECT p
+            FROM Pedido p
+            WHERE p.estabelecimento.id = :estabelecimentoId
+            ORDER BY 
+                CASE p.status
+                    WHEN 'aberto' THEN 1
+                    WHEN 'pendente' THEN 2
+                    WHEN 'fechado' THEN 3
+                    ELSE 4
+                END,
+                p.dataCriacao DESC
+        """)
+        List<Pedido> listarPorEstabelecimentoOrderDataCriacaoStatusOrdenado(@Param("estabelecimentoId") Integer estabelecimentoId);
 }

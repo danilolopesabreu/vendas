@@ -53,11 +53,10 @@ public class ProdutoEstabelecimentoController {
         return mapper.toDTO(salvo);
     }
 
-    @PutMapping("/{id}")
-    public ProdutoEstabelecimentoDTO atualizar(@PathVariable Integer id,
-                                               @RequestBody ProdutoEstabelecimentoDTO dto) {
+    @PutMapping
+    public ProdutoEstabelecimentoDTO atualizar(@RequestBody ProdutoEstabelecimentoDTO dto) {
         ProdutoEstabelecimento entity = mapper.toEntity(dto);
-        ProdutoEstabelecimento atualizado = service.atualizar(id, entity);
+        ProdutoEstabelecimento atualizado = service.atualizar(entity);
         return mapper.toDTO(atualizado);
     }
 

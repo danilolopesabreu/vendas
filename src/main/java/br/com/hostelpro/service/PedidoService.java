@@ -156,6 +156,13 @@ public class PedidoService {
         logger.info("Pedido deletado id={}", id);
     }
     
+    public void cancelarItemPedido(Integer id) {
+    	var itemPedido = itemPedidoRepository.findById(id).orElseThrow(() -> new NotFoundException("ItemPedido não encontrado: " + id));
+    	itemPedido.setStatus("cancelado");
+    	itemPedidoRepository.save(itemPedido);
+    	logger.info("ItemPedido cancelado id={}", id);
+    }
+    
     public void deletarItemPedido(Integer id) {
     	if (!itemPedidoRepository.existsById(id)) throw new NotFoundException("ItemPedido não encontrado: " + id);
     	itemPedidoRepository.deleteById(id);

@@ -37,21 +37,23 @@ public class PedidoController {
         return ResponseEntity.ok(mapper.toDTO(salvo));
     }
 
+    @PutMapping
+    public ResponseEntity<PedidoDTO> atualizarPedido(@Valid @RequestBody PedidoDTO dto) {
+        Pedido entidade = mapper.toEntity(dto);
+        Pedido salvo = service.atualizar(entidade);
+        return ResponseEntity.ok(mapper.toDTO(salvo));
+    }
+    
     @GetMapping("/{id}")
     public ResponseEntity<PedidoDTO> getById(@PathVariable Integer id) {
         return ResponseEntity.ok(mapper.toDTO(service.buscarPorId(id)));
     }
 
     @GetMapping("/estabelecimento/{estabelecimentoId}")
-    public ResponseEntity<List<PedidoDTO>> listarPorEstabelecimento(@PathVariable Integer estabelecimentoId) {
-        return ResponseEntity.ok(service.listarPorEstabelecimento(estabelecimentoId).stream().map(mapper::toDTO).collect(Collectors.toList()));
+    public ResponseEntity<List<PedidoDTO>> listarPorEstabelecimentoOrderDataCriacaoStatusOrdenado(@PathVariable Integer estabelecimentoId) {
+        return ResponseEntity.ok(service.listarPorEstabelecimentoOrderDataCriacaoStatusOrdenado(estabelecimentoId).stream().map(mapper::toDTO).collect(Collectors.toList()));
     }
     
-//    @GetMapping("/estabelecimento/{estabelecimentoId}/quarto/{numeroQuarto}")
-//    public ResponseEntity<List<PedidoDTO>> listarPorEstabelecimento(@PathVariable Integer estabelecimentoId, @PathVariable String numeroQuarto) {
-//    	return ResponseEntity.ok(service.listarPorEstabelecimentoEQuarto(estabelecimentoId, numeroQuarto).stream().map(mapper::toDTO).collect(Collectors.toList()));
-//    }
-
     @PutMapping("/{id}")
     public ResponseEntity<PedidoDTO> atualizar(@PathVariable Integer id, @Valid @RequestBody PedidoDTO dto) {
         Pedido entidade = mapper.toEntity(dto);
@@ -63,5 +65,17 @@ public class PedidoController {
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         service.deletar(id);
         return ResponseEntity.noContent().build();
+    }
+    
+    @DeleteMapping("/item-pedido/cancelar/{id}")
+    public ResponseEntity<Void> cancelarItemPedido(@PathVariable Integer id) {
+    	service.cancelarItemPedido(id);
+    	return ResponseEntity.noContent().build();
+    }
+    
+    @DeleteMapping("/item-pedido/{id}")
+    public ResponseEntity<Void> deletarItemPedido(@PathVariable Integer id) {
+    	service.deletarItemPedido(id);
+    	return ResponseEntity.noContent().build();
     }
 }
