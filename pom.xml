@@ -144,6 +144,15 @@
 	        </plugin>
 	        
             <!-- Plugin do GraalVM Native Gerar binário local (Linux/Windows/macOS) -->
+            <plugin>
+			    <groupId>org.graalvm.buildtools</groupId>
+			    <artifactId>native-maven-plugin</artifactId>
+			    <version>${native.maven.plugin.version}</version>
+			    <configuration>
+			        <imageName>hostelpro</imageName>
+			        <mainClass>br.com.hostelpro.HostelproApplication</mainClass>
+			    </configuration>
+			</plugin>
             <!--
 			<plugin>
 			    <groupId>org.graalvm.buildtools</groupId>
