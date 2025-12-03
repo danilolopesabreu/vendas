@@ -24,6 +24,7 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
     @Query("""
             SELECT p
             FROM Pedido p
+            LEFT JOIN p.itensAgrupados 
             WHERE p.estabelecimento.id = :estabelecimentoId
             ORDER BY 
                 CASE p.status

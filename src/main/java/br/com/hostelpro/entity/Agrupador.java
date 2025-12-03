@@ -28,6 +28,9 @@ public class Agrupador {
 	
 	@OneToMany(mappedBy = "agrupador", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<TipoEstabelecimento> tipoEstabelecimento = new ArrayList<>();
+	
+	@Column
+	private String rotulo;
 
 	// getters/setters
 	public Integer getId() {
@@ -60,5 +63,13 @@ public class Agrupador {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public String getRotulo() {
+		return rotulo;
+	}
+
+	public void setRotulo(String rotulo) {
+		this.rotulo = rotulo;
 	}
 }

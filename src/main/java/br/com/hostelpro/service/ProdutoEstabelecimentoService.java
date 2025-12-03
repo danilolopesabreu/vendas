@@ -31,8 +31,12 @@ public class ProdutoEstabelecimentoService {
                 .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
         try {
-			String url = cloudinaryService.uploadImageBase64(entityAtualizada.getImagem(), entityAtualizada.getEstabelecimento().getId());
-			entity.setImagem(url);
+
+        	if (entityAtualizada.getImagem() != null && entityAtualizada.getImagem().startsWith("data:image")) {
+        		String url = cloudinaryService.uploadImageBase64(entityAtualizada.getImagem(), entityAtualizada.getEstabelecimento().getId());
+        		entity.setImagem(url);
+        	}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

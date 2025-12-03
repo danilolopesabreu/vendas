@@ -9,6 +9,7 @@ public class AgrupadorDTO {
 	private String nome;
 	private String observacao;
 	private List<TipoEstabelecimentoDTO> tipoEstabelecimento = new ArrayList<>();
+	private String rotulo;
 
 	// Getters e Setters
 	public Integer getId() {
@@ -41,6 +42,14 @@ public class AgrupadorDTO {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public String getRotulo() {
+		return rotulo;
+	}
+
+	public void setRotulo(String rotulo) {
+		this.rotulo = rotulo;
 	}
 
 }

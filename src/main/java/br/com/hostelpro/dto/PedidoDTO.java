@@ -28,6 +28,8 @@ public class PedidoDTO {
 	
 	private ItensAgrupadosDTO itensAgrupados;
 	
+	private TipoEstabelecimentoDTO tipoEstabelecimento;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -106,6 +108,14 @@ public class PedidoDTO {
 
 	public void setNumeroDoPedido(String numeroDoPedido) {
 		this.numeroDoPedido = numeroDoPedido;
+	}
+
+	public TipoEstabelecimentoDTO getTipoEstabelecimento() {
+		return tipoEstabelecimento;
+	}
+
+	public void setTipoEstabelecimento(TipoEstabelecimentoDTO tipoEstabelecimento) {
+		this.tipoEstabelecimento = tipoEstabelecimento;
 	}
 
 }

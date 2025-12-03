@@ -16,12 +16,10 @@ import br.com.hostelpro.entity.Pedido;
 import br.com.hostelpro.entity.ProdutoEstabelecimento;
 import br.com.hostelpro.entity.Usuario;
 import br.com.hostelpro.exception.NotFoundException;
-import br.com.hostelpro.repository.ClienteRepository;
 import br.com.hostelpro.repository.EstabelecimentoRepository;
 import br.com.hostelpro.repository.ItemPedidoRepository;
 import br.com.hostelpro.repository.PedidoRepository;
 import br.com.hostelpro.repository.ProdutoEstabelecimentoRepository;
-import br.com.hostelpro.repository.ProdutoRepository;
 import br.com.hostelpro.repository.UsuarioRepository;
 
 @Service
@@ -33,10 +31,6 @@ public class PedidoService {
 	private EstabelecimentoRepository estabelecimentoRepository;
 	@Autowired
 	private UsuarioRepository usuarioRepository;
-	@Autowired
-	private ProdutoRepository produtoRepository;
-	@Autowired
-	private ClienteRepository clienteRepository;
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
 	@Autowired
@@ -83,9 +77,12 @@ public class PedidoService {
                 
             }
         }
+        
         pedido.setStatus("aberto");
         Pedido salvo = pedidoRepository.save(pedido); // cascades items
+        
         logger.info("Pedido criado id={}", salvo.getId());
+        
         return salvo;
     }
 
