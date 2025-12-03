@@ -1,4 +1,4 @@
-name: Build native image (GraalVM)
+name: Build Native Image and Docker (GraalVM)
 
 on:
   push:
@@ -8,15 +8,19 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-native:
+  build-native-docker:
     runs-on: ubuntu-latest
     permissions: write-all
+
+    env:
+      IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/hostelpro
+      IMAGE_TAG: ${{ github.sha }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up JDK (fallback)
+      - name: Set up JDK fallback
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -53,15 +57,42 @@ jobs:
         env:
           MAVEN_OPTS: '-Xmx6g'
         run: |
-          ./mvnw -Pnative -DskipTests -DskipITs -B package
+          ./mvnw -Pnative -DskipTests -B package
 
-      - name: Upload native artifact
+      - name: Build minimal Docker image with native binary
+        run: |
+          # Cria pasta temporária para a imagem
+          mkdir -p docker
+          # Copia binário nativo para pasta docker
+          cp target/hostelpro docker/
+          # Cria Dockerfile mínimo
+          cat > docker/Dockerfile <<EOF
+          FROM debian:bookworm-slim
+          COPY hostelpro /hostelpro
+          RUN chmod +x /hostelpro
+          ENTRYPOINT ["/hostelpro"]
+          EOF
+          # Build da imagem
+          docker build -t $IMAGE_NAME:$IMAGE_TAG docker/
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push Docker image
+        run: |
+          docker push $IMAGE_NAME:$IMAGE_TAG
+
+      - name: Upload native binary as artifact (optional)
         uses: actions/upload-artifact@v4
         with:
           name: native-runner
-          path: target/*-runner || target/*-native-image || target/*.exe || target/*
+          path: target/hostelpro
 
-      - name: Upload full target (for debugging)
+      - name: Upload full target folder (for debugging)
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
