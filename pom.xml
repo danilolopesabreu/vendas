@@ -139,6 +139,13 @@
 	                    <builder>paketobuildpacks/builder:tiny</builder>
 	                </image>
 	            </configuration>
+	            <executions>
+			        <execution>
+			          <goals>
+			            <goal>build-image</goal> <!-- gera OCI image, opcional -->
+			          </goals>
+			        </execution>
+			      </executions>
 	        </plugin>
 	        
             <!-- Plugin do GraalVM Native -->
@@ -153,10 +160,10 @@
 		            <goal>build</goal>
 		          </goals>
                	  <configuration>
-			        <mainClass>br.com.hostelpro.HostelproApplication</mainClass>
-			        <!-- optional: nome do binário -->
-			        <imageName>hostelpro</imageName>
-			      </configuration>
+		            <imageName>hostelpro</imageName>
+		            <mainClass>br.com.hostelpro.HostelproApplication</mainClass>
+		            <classPathMode>expanded</classPathMode> <!-- IMPORTANTE -->
+		          </configuration>
 		        </execution>
 		      </executions>
 		    </plugin>
