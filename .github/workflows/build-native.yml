@@ -1,4 +1,4 @@
-name: Build and Push Docker Image (GraalVM Native)
+name: Build and Push Buildpack Docker Image (GraalVM Native)
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-docker:
+  build-docker-buildpack:
     runs-on: ubuntu-latest
     permissions: write-all
 
