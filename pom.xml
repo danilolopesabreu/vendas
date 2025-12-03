@@ -142,15 +142,34 @@
 			                <goal>build-image</goal> <!-- gera container OCI com binário nativo -->
 			            </goals>
 			            <configuration>
-			                <builder>paketobuildpacks/builder:tiny</builder>
+			                <builder>paketobuildpacks/builder:base</builder>
 			            </configuration>
 			        </execution>
 			    </executions>
 			</plugin>
 	        
-            <!-- Plugin do GraalVM Native -->
-
-
+            <!-- Plugin do GraalVM Native Gerar binário local (Linux/Windows/macOS) -->
+            <!--
+			<plugin>
+			    <groupId>org.graalvm.buildtools</groupId>
+			    <artifactId>native-maven-plugin</artifactId>
+			    <version>0.11.1</version>
+			    <executions>
+			        <execution>
+			            <id>build-native</id>
+			            <goals>
+			                <goal>build</goal>
+			            </goals>
+			            <configuration>
+			                <mainClass>br.com.hostelpro.HostelproApplication</mainClass>
+			                <imageName>hostelpro</imageName>
+			                <classPathMode>expanded</classPathMode>
+			            </configuration>
+			        </execution>
+			    </executions>
+			</plugin>
+			-->
+	
         </plugins>
     </build>
 
