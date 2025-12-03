@@ -1,4 +1,4 @@
-name: Build and Push Buildpack Docker Image (GraalVM Native)
+name: Build and Push Remote Buildpack Image (GraalVM Native)
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-docker-buildpack:
+  build-remote-buildpack:
     runs-on: ubuntu-latest
     permissions: write-all
 
@@ -19,16 +19,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up JDK fallback
         uses: actions/setup-java@v4
@@ -59,15 +49,19 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-m2-
 
-      - name: Build Docker image with Paketo Buildpacks
+      - name: Build JAR (optional, speeds remote build)
+        run: |
+          ./mvnw -DskipTests package -DskipNative -B
+
+      - name: Build Remote Image with Paketo Buildpacks
         run: |
           ./mvnw -DskipTests -B package spring-boot:build-image \
             -Dspring-boot.build-image.imageName=$IMAGE_NAME:$IMAGE_TAG \
-            -Dspring-boot.build-image.builder=paketobuildpacks/builder:full
-
-      - name: Push Docker image
-        run: |
-          docker push $IMAGE_NAME:$IMAGE_TAG
+            -Dspring-boot.build-image.builder=paketobuildpacks/builder:full \
+            -Dspring-boot.build-image.publish=true \
+            -Dspring-boot.build-image.publishRegistry=ghcr.io \
+            -Dspring-boot.build-image.publishUsername=${{ github.actor }} \
+            -Dspring-boot.build-image.publishPassword=${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload target folder (optional, debugging)
         if: ${{ always() }}
