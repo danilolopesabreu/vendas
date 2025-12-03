@@ -1,4 +1,4 @@
-name: Build and Push Remote Buildpack Image
+name: Build native image (GraalVM)
 
 on:
   push:
@@ -8,24 +8,36 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-remote-buildpack:
+  build-native:
     runs-on: ubuntu-latest
     permissions: write-all
 
-    env:
-      IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/hostelpro
-      IMAGE_TAG: ${{ github.sha }}
-
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-java@v4
+      - name: Set up JDK (fallback)
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '21'
           cache: 'maven'
 
-      - name: Cache Maven repository
+      - name: Setup GraalVM (JDK + native-image)
+        uses: graalvm/setup-graalvm@v1
+        with:
+          distribution: 'graalvm-community'
+          version: '23.1.2'
+          java-version: '21'
+          components: 'native-image'
+
+      - name: Verify versions
+        run: |
+          java -version
+          native-image --version || true
+          echo "MAVEN: $(mvn -v | sed -n '1p')"
+
+      - name: Cache Maven local repository
         uses: actions/cache@v4
         with:
           path: ~/.m2/repository
@@ -33,19 +45,23 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-m2-
 
-      - name: Build and Push Remote Image
+      - name: Build JAR (optional, speeds native build)
         run: |
-          ./mvnw -B package spring-boot:build-image \
-            -DskipTests \
-            -Dspring-boot.build-image.imageName=$IMAGE_NAME:$IMAGE_TAG \
-            -Dspring-boot.build-image.builder=paketobuildpacks/builder:full \
-            -Dspring-boot.build-image.publish=true \
-            -Dspring-boot.build-image.publishRegistry=ghcr.io \
-            -Dspring-boot.build-image.publishUsername=${{ github.actor }} \
-            -Dspring-boot.build-image.publishPassword=${{ secrets.GITHUB_TOKEN }}
+          ./mvnw -DskipTests package -DskipNative -B
 
+      - name: Build native image (GraalVM)
+        env:
+          MAVEN_OPTS: '-Xmx6g'
+        run: |
+          ./mvnw -Pnative -DskipTests -DskipITs -B package
 
-      - name: Upload target folder (optional, debugging)
+      - name: Upload native artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-runner
+          path: target/*-runner || target/*-native-image || target/*.exe || target/*
+
+      - name: Upload full target (for debugging)
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
