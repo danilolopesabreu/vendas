@@ -1,0 +1,68 @@
+name: Build native image (GraalVM)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-native:
+    runs-on: ubuntu-latest
+    permissions: write-all
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK (fallback)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: 'maven'
+
+      - name: Setup GraalVM (JDK + native-image)
+        uses: graalvm/setup-graalvm@v1
+        with:
+          version: '22.3.2'
+          java-version: '21'
+          components: 'native-image'
+
+      - name: Verify versions
+        run: |
+          java -version
+          native-image --version || true
+          echo "MAVEN: $(mvn -v | sed -n '1p')"
+
+      - name: Cache Maven local repository
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-m2-
+
+      - name: Build JAR (optional, speeds native build)
+        run: |
+          ./mvnw -DskipTests package -DskipNative -B
+
+      - name: Build native image (GraalVM)
+        env:
+          MAVEN_OPTS: '-Xmx6g'
+        run: |
+          ./mvnw -Pnative -DskipTests -DskipITs -B package
+
+      - name: Upload native artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-runner
+          path: target/*-runner || target/*-native-image || target/*.exe || target/*
+
+      - name: Upload full target (for debugging)
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: target-folder
+          path: target
