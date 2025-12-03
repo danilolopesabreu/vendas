@@ -132,41 +132,24 @@
             </plugin>
             
 	        <plugin>
-	            <groupId>org.springframework.boot</groupId>
-	            <artifactId>spring-boot-maven-plugin</artifactId>
-	            <configuration>
-	                <image>
-	                    <builder>paketobuildpacks/builder:tiny</builder>
-	                </image>
-	            </configuration>
-	            <executions>
+			    <groupId>org.springframework.boot</groupId>
+			    <artifactId>spring-boot-maven-plugin</artifactId>
+			    <version>3.5.7</version>
+			    <executions>
 			        <execution>
-			          <goals>
-			            <goal>build-image</goal> <!-- gera OCI image, opcional -->
-			          </goals>
+			            <id>build-native</id>
+			            <goals>
+			                <goal>build-image</goal> <!-- gera container OCI com binário nativo -->
+			            </goals>
+			            <configuration>
+			                <builder>paketobuildpacks/builder:tiny</builder>
+			            </configuration>
 			        </execution>
-			      </executions>
-	        </plugin>
+			    </executions>
+			</plugin>
 	        
             <!-- Plugin do GraalVM Native -->
-            <plugin>
-		      <groupId>org.graalvm.buildtools</groupId>
-		      <artifactId>native-maven-plugin</artifactId>
-		      <version>${native.maven.plugin.version}</version>
-		      <executions>
-		        <execution>
-		          <id>build-native</id>
-		          <goals>
-		            <goal>build</goal>
-		          </goals>
-               	  <configuration>
-		            <imageName>hostelpro</imageName>
-		            <mainClass>br.com.hostelpro.HostelproApplication</mainClass>
-		            <classPathMode>expanded</classPathMode> <!-- IMPORTANTE -->
-		          </configuration>
-		        </execution>
-		      </executions>
-		    </plugin>
+
 
         </plugins>
     </build>
