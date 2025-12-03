@@ -84,8 +84,8 @@ jobs:
         with:
           tag_name: ${{ env.TAG_NAME }}
           files: |
-            target/*-runner
-            target/*-native-image
+            target/hostelpro*
+            target/*hostelpro
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
