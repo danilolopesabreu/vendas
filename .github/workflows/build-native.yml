@@ -2,6 +2,7 @@ name: Build native image (GraalVM)
 
 on:
   push:
+    branches: [ main ]   # agora roda mesmo sem existir tag
     tags:
       - 'v*'
   workflow_dispatch:
@@ -15,6 +16,30 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # -----------------------------------------------------------
+      # STEP 1: Criar TAG automaticamente se push não for tag
+      # -----------------------------------------------------------
+      - name: Ensure tag exists (create auto-tag when needed)
+        id: autotag
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            TAG_NAME="${GITHUB_REF#refs/tags/}"
+            echo "Using existing tag: $TAG_NAME"
+          else
+            TAG_NAME="auto-${GITHUB_SHA}"
+            echo "Creating tag: $TAG_NAME"
+            git config --global user.email "actions@github.com"
+            git config --global user.name "GitHub Actions"
+
+            git tag "$TAG_NAME"
+            git push origin "$TAG_NAME"
+          fi
+
+          echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
+
+      # -----------------------------------------------------------
+      # JDK
+      # -----------------------------------------------------------
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
@@ -22,6 +47,9 @@ jobs:
           java-version: '21'
           cache: 'maven'
 
+      # -----------------------------------------------------------
+      # GraalVM
+      # -----------------------------------------------------------
       - name: Setup GraalVM
         uses: graalvm/setup-graalvm@v1
         with:
@@ -30,27 +58,40 @@ jobs:
           java-version: '21'
           components: native-image
 
+      # -----------------------------------------------------------
+      # Cache Maven
+      # -----------------------------------------------------------
       - name: Cache Maven local repository
         uses: actions/cache@v4
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
 
+      # -----------------------------------------------------------
+      # Build Native Image
+      # -----------------------------------------------------------
       - name: Build native image (GraalVM)
         env:
           MAVEN_OPTS: '-Xmx6g'
         run: |
           ./mvnw -Pnative -DskipTests -B package
 
+      # -----------------------------------------------------------
+      # Upload para Release (usando a TAG criada/acessada)
+      # -----------------------------------------------------------
       - name: Upload native binary to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ env.TAG_NAME }}
           files: |
             target/*-runner
             target/*-native-image
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # -----------------------------------------------------------
+      # Artifacts para debugging
+      # -----------------------------------------------------------
       - name: Upload full target (for debugging)
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
