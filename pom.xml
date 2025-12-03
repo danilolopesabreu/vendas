@@ -152,6 +152,11 @@
 		          <goals>
 		            <goal>build</goal>
 		          </goals>
+               	  <configuration>
+			        <mainClass>br.com.hostelpro.HostelproApplication</mainClass>
+			        <!-- optional: nome do binário -->
+			        <imageName>hostelpro</imageName>
+			      </configuration>
 		        </execution>
 		      </executions>
 		    </plugin>
