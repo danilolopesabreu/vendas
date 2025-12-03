@@ -26,6 +26,7 @@ jobs:
       - name: Setup GraalVM (JDK + native-image)
         uses: graalvm/setup-graalvm@v1
         with:
+          distribution: 'graalvm-community'
           version: '23.1.2'
           java-version: '21'
           components: 'native-image'
