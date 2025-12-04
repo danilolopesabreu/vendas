@@ -1,8 +1,8 @@
-name: Build native image (GraalVM)
+name: Build and Deploy Native Image (GraalVM + Buildpack)
 
 on:
   push:
-    branches: [ main ]   # agora roda mesmo sem existir tag
+    branches: [ main ]
     tags:
       - 'v*'
   workflow_dispatch:
@@ -11,6 +11,12 @@ jobs:
   build-native:
     runs-on: ubuntu-latest
     permissions: write-all
+
+    env:
+      IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/hostelpro
+      IMAGE_TAG: ${{ github.sha }}
+      RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+      RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
 
     steps:
       - name: Checkout repository
@@ -27,18 +33,15 @@ jobs:
             echo "Using existing tag: $TAG_NAME"
           else
             TAG_NAME="auto-${GITHUB_SHA}"
-            echo "Creating tag: $TAG_NAME"
             git config --global user.email "actions@github.com"
             git config --global user.name "GitHub Actions"
-
             git tag "$TAG_NAME"
             git push origin "$TAG_NAME"
           fi
-
           echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
 
       # -----------------------------------------------------------
-      # JDK
+      # STEP 2: Set up JDK
       # -----------------------------------------------------------
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -48,7 +51,7 @@ jobs:
           cache: 'maven'
 
       # -----------------------------------------------------------
-      # GraalVM
+      # STEP 3: Setup GraalVM
       # -----------------------------------------------------------
       - name: Setup GraalVM
         uses: graalvm/setup-graalvm@v1
@@ -59,7 +62,7 @@ jobs:
           components: native-image
 
       # -----------------------------------------------------------
-      # Cache Maven
+      # STEP 4: Cache Maven
       # -----------------------------------------------------------
       - name: Cache Maven local repository
         uses: actions/cache@v4
@@ -68,51 +71,36 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
 
       # -----------------------------------------------------------
-      # Build Native Image
+      # STEP 5: Build JAR (necessário para Buildpack)
       # -----------------------------------------------------------
-      - name: Build native image (GraalVM)
-        env:
-          MAVEN_OPTS: '-Xmx6g'
+      - name: Build JAR
+        run: ./mvnw -DskipTests package -B
+
+      # -----------------------------------------------------------
+      # STEP 6: Build Docker Image com Buildpack
+      # -----------------------------------------------------------
+      - name: Build Docker Image with Buildpacks
         run: |
-          ./mvnw -Pnative -DskipTests -B package
+          ./mvnw spring-boot:build-image \
+            -Dspring-boot.build-image.imageName=$IMAGE_NAME:$IMAGE_TAG \
+            -Dspring-boot.build-image.builder=paketobuildpacks/builder:full \
+            -Dspring-boot.build-image.buildpacks=paketobuildpacks/java \
+            -Dspring-boot.build-image.publish=true \
+            -Dspring-boot.build-image.publishRegistry=ghcr.io \
+            -Dspring-boot.build-image.publishUsername=${{ github.actor }} \
+            -Dspring-boot.build-image.publishPassword=${{ secrets.GITHUB_TOKEN }}
 
       # -----------------------------------------------------------
-      # Build Docker image with the native binary
+      # STEP 7: Deploy para Render
       # -----------------------------------------------------------
-      - name: Build Docker image
+      - name: Deploy to Render
         run: |
-          IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/hostelpro:${{ env.TAG_NAME }}
-          docker build -t $IMAGE_NAME .
+          curl -X POST "https://api.render.com/deploy/srv-${RENDER_SERVICE_ID}" \
+               -H "Accept: application/json" \
+               -H "Authorization: Bearer ${RENDER_API_KEY}"
 
       # -----------------------------------------------------------
-      # Login to GHCR
-      # -----------------------------------------------------------
-      - name: Login to GHCR
-        run: |
-          echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-      # -----------------------------------------------------------
-      # Push Docker image
-      # -----------------------------------------------------------
-      - name: Push Docker image
-        run: |
-          IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/hostelpro:${{ env.TAG_NAME }}
-          docker push $IMAGE_NAME
-
-      # -----------------------------------------------------------
-      # Upload para Release (usando a TAG criada/acessada)
-      # -----------------------------------------------------------
-      - name: Upload native binary to GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ env.TAG_NAME }}
-          files: |
-            target/*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # -----------------------------------------------------------
-      # Artifacts para debugging
+      # STEP 8: Upload target folder (opcional, debugging)
       # -----------------------------------------------------------
       - name: Upload full target (for debugging)
         if: ${{ always() }}
