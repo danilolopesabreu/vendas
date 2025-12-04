@@ -1,0 +1,69 @@
+name: Build & Deploy to Render (GraalVM + Buildpacks)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+
+    env:
+      IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/hostelpro
+      IMAGE_TAG: ${{ github.sha }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: 'maven'
+
+      - name: Setup GraalVM (JDK + native-image)
+        uses: graalvm/setup-graalvm@v1
+        with:
+          distribution: graalvm-community
+          version: '23.1.2'
+          java-version: '21'
+          components: native-image
+
+      - name: Cache Maven
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+
+      - name: Build JAR
+        run: |
+          ./mvnw -DskipTests package -DskipNative -B
+
+      - name: Build Docker image (Buildpacks + GraalVM)
+        run: |
+          ./mvnw spring-boot:build-image \
+            -Dspring-boot.build-image.imageName=${IMAGE_NAME}:${IMAGE_TAG} \
+            -Dspring-boot.build-image.builder=paketobuildpacks/builder:base
+
+      - name: Login to GHCR
+        run: |
+          echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push Docker image to GHCR
+        run: |
+          docker push ${IMAGE_NAME}:${IMAGE_TAG}
+
+      - name: Trigger Render Deploy
+        run: |
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
+
+      - name: Show deployment info
+        run: |
+          echo "Deploy triggered!"
+          echo "Image: ${IMAGE_NAME}:${IMAGE_TAG}"
