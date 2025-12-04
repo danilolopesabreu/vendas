@@ -138,12 +138,22 @@
 	                    </goals>
 	                    <configuration>
 	                        <builder>paketobuildpacks/builder:full</builder>
+		                    <buildpacks>
+					          <buildpack>paketobuildpacks/java</buildpack>
+					        </buildpacks>
 	                    </configuration>
 	                </execution>
 	            </executions>
+			      <configuration>
+			        <image>
+			          <buildpacks>
+			            <buildpack>paketobuildpacks/native-image</buildpack>
+			          </buildpacks>
+			        </image>
+			      </configuration>
 	        </plugin>
-	        
-            <!-- Plugin do GraalVM Native Gerar binário local (Linux/Windows/macOS) -->
+
+			<!-- Plugin do GraalVM Native Gerar binário local (Linux/Windows/macOS) -->
             <plugin>
 			    <groupId>org.graalvm.buildtools</groupId>
 			    <artifactId>native-maven-plugin</artifactId>
@@ -153,7 +163,7 @@
 			        <mainClass>br.com.hostelpro.HostelproApplication</mainClass>
 			    </configuration>
 			</plugin>
-            <!--
+			<!--
 			<plugin>
 			    <groupId>org.graalvm.buildtools</groupId>
 			    <artifactId>native-maven-plugin</artifactId>
@@ -181,11 +191,15 @@
 	<profiles>
 	  <profile>
 	    <id>native</id>
+	    <properties>
+	      <spring.aot.enabled>true</spring.aot.enabled>
+	    </properties>	    
 	    <build>
 	      <plugins>
 	        <plugin>
 	          <groupId>org.graalvm.buildtools</groupId>
 	          <artifactId>native-maven-plugin</artifactId>
+	          <extensions>true</extensions>
 	        </plugin>
 	      </plugins>
 	    </build>
