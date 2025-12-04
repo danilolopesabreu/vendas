@@ -49,7 +49,7 @@ jobs:
         run: |
           ./mvnw spring-boot:build-image \
             -Dspring-boot.build-image.imageName=${IMAGE_NAME}:${IMAGE_TAG} \
-            -Dspring-boot.build-image.builder=paketobuildpacks/builder:base
+            -Dspring-boot.build-image.builder=paketobuildpacks/builder:full
 
       - name: Login to GHCR
         run: |
