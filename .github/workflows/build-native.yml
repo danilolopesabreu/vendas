@@ -78,7 +78,8 @@ jobs:
       # STEP 5: Build JAR (necessário para Buildpack)
       # -----------------------------------------------------------
       - name: Build JAR
-        run: ./mvnw -Pnative spring-boot:build-image
+        run: ./mvnw clean package -Pnative -DskipTests
+        #run: ./mvnw -Pnative spring-boot:build-image
 
 
       # -----------------------------------------------------------
@@ -104,9 +105,9 @@ jobs:
       # -----------------------------------------------------------
       # STEP 7: Deploy para Render
       # -----------------------------------------------------------
-      - name: Trigger Render Deploy
-        run: |
-          curl -X POST ${{ vars.RENDER_DEPLOY_HOOK }} 
+      #- name: Trigger Render Deploy
+      #  run: |
+      #    curl -X POST ${{ vars.RENDER_DEPLOY_HOOK }} 
 
       # -----------------------------------------------------------
       # STEP 8: Upload target folder (opcional, debugging)
