@@ -2,13 +2,15 @@
 # 1) Imagem base mínima (não precisa glibc)
 #    Distroless "static" é ideal para binários nativos.
 # ----------------------------------------------------
-FROM gcr.io/distroless/static AS runtime
+FROM alpine:latest
 
 # Diretório de trabalho dentro do container
 WORKDIR /app
 
 # Copia o binário nativo gerado pelo GraalVM
 COPY target/hostelpro ./hostelpro
+
+RUN chmod +x hostelpro
 
 # Garante que o binário é executável
 USER nonroot:nonroot
