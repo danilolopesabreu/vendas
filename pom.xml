@@ -34,7 +34,6 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <!-- Validation -->
         <dependency>
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
@@ -45,12 +44,12 @@
             <artifactId>hibernate-validator</artifactId>
         </dependency>
 
-        <!-- MapStruct -->
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>${mapstruct.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
@@ -63,7 +62,6 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Logging -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
@@ -107,6 +105,7 @@
     <build>
         <plugins>
 
+            <!-- COMPILAÇÃO NORMAL / MAPSTRUCT -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -125,85 +124,71 @@
                     </compilerArgs>
                 </configuration>
             </plugin>
-            
-	        <plugin>
-	            <groupId>org.springframework.boot</groupId>
-	            <artifactId>spring-boot-maven-plugin</artifactId>
-	            <version>3.5.8</version>
-	            <executions>
-	                <execution>
-	                    <id>build-image</id>
-	                    <goals>
-	                        <goal>build-image</goal>
-	                    </goals>
-	                    <configuration>
-	                        <builder>paketobuildpacks/builder:full</builder>
-		                    <buildpacks>
-					          <buildpack>paketobuildpacks/java</buildpack>
-					        </buildpacks>
-	                    </configuration>
-	                </execution>
-	            </executions>
-			      <configuration>
-			        <image>
-			          <buildpacks>
-			            <buildpack>paketobuildpacks/native-image</buildpack>
-			          </buildpacks>
-			        </image>
-			      </configuration>
-	        </plugin>
 
-			<!-- Plugin do GraalVM Native Gerar binário local (Linux/Windows/macOS) -->
+            <!-- SPRING BOOT (build normal) -->
             <plugin>
-			    <groupId>org.graalvm.buildtools</groupId>
-			    <artifactId>native-maven-plugin</artifactId>
-			    <version>${native.maven.plugin.version}</version>
-			    <configuration>
-			        <imageName>hostelpro</imageName>
-			        <mainClass>br.com.hostelpro.HostelproApplication</mainClass>
-			    </configuration>
-			</plugin>
-			<!--
-			<plugin>
-			    <groupId>org.graalvm.buildtools</groupId>
-			    <artifactId>native-maven-plugin</artifactId>
-			    <version>0.11.1</version>
-			    <executions>
-			        <execution>
-			            <id>build-native</id>
-			            <goals>
-			                <goal>build</goal>
-			            </goals>
-			            <configuration>
-			                <mainClass>br.com.hostelpro.HostelproApplication</mainClass>
-			                <imageName>hostelpro</imageName>
-			                <classPathMode>expanded</classPathMode>
-			            </configuration>
-			        </execution>
-			    </executions>
-			</plugin>
-			-->
-	
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
         </plugins>
     </build>
 
-    <!-- PROFILE PARA NATIVO -->
-	<profiles>
-	  <profile>
-	    <id>native</id>
-	    <properties>
-	      <spring.aot.enabled>true</spring.aot.enabled>
-	    </properties>	    
-	    <build>
-	      <plugins>
-	        <plugin>
-	          <groupId>org.graalvm.buildtools</groupId>
-	          <artifactId>native-maven-plugin</artifactId>
-	          <extensions>true</extensions>
-	        </plugin>
-	      </plugins>
-	    </build>
-	  </profile>
-	</profiles>
+    <!-- PROFILE PARA BUILD NATIVO -->
+    <profiles>
+        <profile>
+            <id>native</id>
+            <properties>
+                <spring.aot.enabled>true</spring.aot.enabled>
+            </properties>
+
+            <build>
+                <plugins>
+
+                    <!-- GRAALVM NATIVE BUILD -->
+                    <plugin>
+                        <groupId>org.graalvm.buildtools</groupId>
+                        <artifactId>native-maven-plugin</artifactId>
+                        <version>${native.maven.plugin.version}</version>
+                        <extensions>true</extensions>
+                        <executions>
+                            <execution>
+                                <id>build-native</id>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                                <configuration>
+                                    <mainClass>br.com.hostelpro.HostelproApplication</mainClass>
+                                    <imageName>hostelpro</imageName>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- BUILD DA IMAGEM NATIVA PARA O RENDER -->
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>native-image</id>
+                                <goals>
+                                    <goal>build-image</goal>
+                                </goals>
+                                <configuration>
+                                    <image>
+                                        <buildpacks>
+                                            <buildpack>paketobuildpacks/native-image</buildpack>
+                                        </buildpacks>
+                                    </image>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
