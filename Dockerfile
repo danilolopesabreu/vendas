@@ -4,6 +4,9 @@
 # ----------------------------------------------------
 FROM alpine:latest
 
+# Cria um usuário não-root
+RUN adduser -D -u 1000 nonroot
+
 # Diretório de trabalho dentro do container
 WORKDIR /app
 
@@ -12,8 +15,8 @@ COPY target/hostelpro ./hostelpro
 
 RUN chmod +x hostelpro
 
-# Garante que o binário é executável
-USER nonroot:nonroot
+# Usa o usuário criado
+USER nonroot
 
 # Porta exposta
 EXPOSE 8080
