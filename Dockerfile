@@ -2,7 +2,7 @@
 # 1) Imagem base mínima (não precisa glibc)
 #    Distroless "static" é ideal para binários nativos.
 # ----------------------------------------------------
-FROM alpine:latest
+FROM ubuntu:22.04
 
 # Cria um usuário não-root
 RUN adduser -D -u 1000 nonroot
