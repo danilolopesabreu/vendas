@@ -74,24 +74,23 @@ jobs:
       # STEP 5: Build JAR (necessário para Buildpack)
       # -----------------------------------------------------------
       - name: Build JAR
-        run: ./mvnw spring-boot:build-image \
-              -Dspring-boot.build-image.builder=paketobuildpacks/builder:full \
-              -Dspring-boot.build-image.publish=true
+        run: ./mvnw -Pnative spring-boot:build-image
 
 
       # -----------------------------------------------------------
-      # STEP 6: Build Docker Image com Buildpack
+      # STEP 6: Build Docker Image 
       # -----------------------------------------------------------
-      - name: Build Docker Image with Buildpacks
+      - name: Login to GHCR
+        run: echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build docker image
         run: |
-          ./mvnw spring-boot:build-image \
-            -Dspring-boot.build-image.imageName=$IMAGE_NAME:$IMAGE_TAG \
-            -Dspring-boot.build-image.builder=paketobuildpacks/builder:full \
-            -Dspring-boot.build-image.buildpacks=paketobuildpacks/java \
-            -Dspring-boot.build-image.publish=true \
-            -Dspring-boot.build-image.publishRegistry=ghcr.io \
-            -Dspring-boot.build-image.publishUsername=${{ github.actor }} \
-            -Dspring-boot.build-image.publishPassword=${{ secrets.GITHUB_TOKEN }}
+          docker build -t ghcr.io/${{ github.repository_owner }}/hostelpro:${{ env.TAG_NAME }} .
+
+      - name: Push image to GHCR
+        run: |
+          docker push ghcr.io/${{ github.repository_owner }}/hostelpro:${{ env.TAG_NAME }}
+
 
       # -----------------------------------------------------------
       # STEP 7: Deploy para Render
