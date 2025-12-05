@@ -1,4 +1,4 @@
-name: Build and Deploy Native Image (GraalVM + Buildpack)
+name: Build And Deploy Native Image to Render
 
 on:
   push:
