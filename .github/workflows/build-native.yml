@@ -74,7 +74,10 @@ jobs:
       # STEP 5: Build JAR (necessário para Buildpack)
       # -----------------------------------------------------------
       - name: Build JAR
-        run: ./mvnw -DskipTests package -B
+        run: ./mvnw spring-boot:build-image \
+              -Dspring-boot.build-image.builder=paketobuildpacks/builder:full \
+              -Dspring-boot.build-image.publish=true
+
 
       # -----------------------------------------------------------
       # STEP 6: Build Docker Image com Buildpack
