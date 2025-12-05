@@ -90,23 +90,22 @@ jobs:
       - name: Build docker image
         run: |
           docker build -t ghcr.io/${{ github.repository_owner }}/hostelpro:${{ env.TAG_NAME }} .
-          docker tag ghcr.io/${{ github.repository_owner }}/hostelpro:${{ env.TAG_NAME }} ghcr.io/${{ github.repository_owner }}/hostelpro:latest
-          docker push ghcr.io/${{ github.repository_owner }}/hostelpro:latest
 
       - name: Push image to GHCR
         run: |
           docker push ghcr.io/${{ github.repository_owner }}/hostelpro:${{ env.TAG_NAME }}
-
+          docker tag ghcr.io/${{ github.repository_owner }}/hostelpro:${{ env.TAG_NAME }} \
+           ghcr.io/${{ github.repository_owner }}/hostelpro:latest
+          docker push ghcr.io/${{ github.repository_owner }}/hostelpro:latest
 
       # -----------------------------------------------------------
       # STEP 7: Deploy para Render
       # -----------------------------------------------------------
-      - name: Deploy to Render
-        env:
-          RENDER_DEPLOY_HOOK: ${{ vars.RENDER_DEPLOY_HOOK }}
+      - name: Trigger Render Deploy
         run: |
-          echo "Triggering Render deploy..."
-          curl -X POST "$RENDER_DEPLOY_HOOK"
+          curl -X POST "https://api.render.com/deploy/${{ secrets.RENDER_SERVICE_ID }}" \
+               -H "Accept: application/json" \
+               -H "Authorization: Bearer ${{ secrets.RENDER_DEPLOY_HOOK }}"
 
       # -----------------------------------------------------------
       # STEP 8: Upload target folder (opcional, debugging)
