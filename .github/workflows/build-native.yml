@@ -74,9 +74,7 @@ jobs:
       # STEP 5: Build JAR (necessário para Buildpack)
       # -----------------------------------------------------------
       - name: Build JAR
-        run: ./mvnw spring-boot:build-image \
-              -Dspring-boot.build-image.builder=paketobuildpacks/builder:full \
-              -Dspring-boot.build-image.publish=true
+        run: ./mvnw -Pnative -DskipTests clean package
 
 
       # -----------------------------------------------------------
