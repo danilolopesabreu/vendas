@@ -4,11 +4,11 @@
 # ----------------------------------------------------
 FROM ubuntu:22.04
 
-# Cria um usuário não-root
-RUN adduser -D -u 1000 nonroot
-
 # Diretório de trabalho dentro do container
 WORKDIR /app
+
+# Cria usuário não-root
+RUN useradd -m nonroot
 
 # Copia o binário nativo gerado pelo GraalVM
 COPY target/hostelpro ./hostelpro
