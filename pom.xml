@@ -163,12 +163,11 @@
 	                    </executions>
 	                </plugin>
 	
-	                <!-- DESATIVADO POR PADRÃO (para evitar execução automática) -->
+	                <!-- DESATIVADO POR PADRÃO (para evitar execução automática) 
 	                <plugin>
 	                    <groupId>org.springframework.boot</groupId>
 	                    <artifactId>spring-boot-maven-plugin</artifactId>
 	                    <configuration>
-	                        <!-- Evita execução acidental fora do profile -->
 	                        <skip>true</skip>
 	                    </configuration>
 	                    <executions>
@@ -178,7 +177,6 @@
 	                                <goal>build-image</goal>
 	                            </goals>
 	                            <configuration>
-	                                <!-- buildpack somente quando explicitamente chamado -->
 	                                <skip>false</skip>
 	                                <image>
 	                                    <buildpacks>
@@ -189,6 +187,7 @@
 	                        </execution>
 	                    </executions>
 	                </plugin>
+	                -->
 	
 	            </plugins>
 	        </build>
