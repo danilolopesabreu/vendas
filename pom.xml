@@ -135,60 +135,66 @@
     </build>
 
     <!-- PROFILE PARA BUILD NATIVO -->
-    <profiles>
-        <profile>
-            <id>native</id>
-            <properties>
-                <spring.aot.enabled>true</spring.aot.enabled>
-            </properties>
+	 <profiles>
+	    <profile>
+	        <id>native</id>
+	        <properties>
+	            <spring.aot.enabled>true</spring.aot.enabled>
+	        </properties>
+	
+	        <build>
+	            <plugins>
+	
+	                <!-- GERA BINÁRIO NATIVO -->
+	                <plugin>
+	                    <groupId>org.graalvm.buildtools</groupId>
+	                    <artifactId>native-maven-plugin</artifactId>
+	                    <version>${native.maven.plugin.version}</version>
+	                    <executions>
+	                        <execution>
+	                            <id>native-build</id>
+	                            <goals>
+	                                <goal>build</goal>
+	                            </goals>
+	                            <configuration>
+	                                <mainClass>br.com.hostelpro.HostelproApplication</mainClass>
+	                                <imageName>hostelpro</imageName>
+	                            </configuration>
+	                        </execution>
+	                    </executions>
+	                </plugin>
+	
+	                <!-- DESATIVADO POR PADRÃO (para evitar execução automática) -->
+	                <plugin>
+	                    <groupId>org.springframework.boot</groupId>
+	                    <artifactId>spring-boot-maven-plugin</artifactId>
+	                    <configuration>
+	                        <!-- Evita execução acidental fora do profile -->
+	                        <skip>true</skip>
+	                    </configuration>
+	                    <executions>
+	                        <execution>
+	                            <id>native-image</id>
+	                            <goals>
+	                                <goal>build-image</goal>
+	                            </goals>
+	                            <configuration>
+	                                <!-- buildpack somente quando explicitamente chamado -->
+	                                <skip>false</skip>
+	                                <image>
+	                                    <buildpacks>
+	                                        <buildpack>paketobuildpacks/native-image</buildpack>
+	                                    </buildpacks>
+	                                </image>
+	                            </configuration>
+	                        </execution>
+	                    </executions>
+	                </plugin>
+	
+	            </plugins>
+	        </build>
+	    </profile>
+	</profiles>
 
-            <build>
-                <plugins>
-
-                    <!-- GRAALVM NATIVE BUILD -->
-                    <plugin>
-                        <groupId>org.graalvm.buildtools</groupId>
-                        <artifactId>native-maven-plugin</artifactId>
-                        <version>${native.maven.plugin.version}</version>
-                        <extensions>true</extensions>
-                        <executions>
-                            <execution>
-                                <id>build-native</id>
-                                <goals>
-                                    <goal>build</goal>
-                                </goals>
-                                <configuration>
-                                    <mainClass>br.com.hostelpro.HostelproApplication</mainClass>
-                                    <imageName>hostelpro</imageName>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                    <!-- BUILD DA IMAGEM NATIVA PARA O RENDER -->
-                    <plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>native-image</id>
-                                <goals>
-                                    <goal>build-image</goal>
-                                </goals>
-                                <configuration>
-                                    <image>
-                                        <buildpacks>
-                                            <buildpack>paketobuildpacks/native-image</buildpack>
-                                        </buildpacks>
-                                    </image>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
 </project>
