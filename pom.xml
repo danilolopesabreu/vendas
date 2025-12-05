@@ -138,6 +138,9 @@
 	 <profiles>
 	    <profile>
 	        <id>native</id>
+	          <properties>
+			    <spring.aot.enabled>true</spring.aot.enabled>
+		 	  </properties>
 	        <build>
 	            <plugins>
 	
