@@ -6,7 +6,11 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
-
+  
+permissions:
+  contents: read
+  packages: write
+  
 jobs:
   build-native:
     runs-on: ubuntu-latest
