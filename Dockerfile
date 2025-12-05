@@ -22,4 +22,4 @@ USER nonroot
 EXPOSE 8080
 
 # Executa o binário nativo
-ENTRYPOINT ["/app/hostelpro"]
+ENTRYPOINT ["./hostelpro"]
