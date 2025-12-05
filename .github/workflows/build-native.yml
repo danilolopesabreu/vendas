@@ -100,10 +100,11 @@ jobs:
       # STEP 7: Deploy para Render
       # -----------------------------------------------------------
       - name: Deploy to Render
+        env:
+          RENDER_DEPLOY_HOOK: ${{ vars.RENDER_DEPLOY_HOOK }}
         run: |
-          curl -X POST "https://api.render.com/deploy/srv-${RENDER_SERVICE_ID}" \
-               -H "Accept: application/json" \
-               -H "Authorization: Bearer ${RENDER_API_KEY}"
+          echo "Triggering Render deploy..."
+          curl -X POST "$RENDER_DEPLOY_HOOK"
 
       # -----------------------------------------------------------
       # STEP 8: Upload target folder (opcional, debugging)
