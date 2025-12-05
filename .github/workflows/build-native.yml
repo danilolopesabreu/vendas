@@ -106,7 +106,7 @@ jobs:
       # -----------------------------------------------------------
       - name: Trigger Render Deploy
         run: |
-          curl -X POST "https://api.render.com/deploy/srv-d4pefjbuibrs738pkb9g" \
+          curl -X POST "https://api.render.com/deploy/${{ secrets.RENDER_SERVICE_ID }}" \
                -H "Accept: application/json" \
                -H "Authorization: Bearer ${{ secrets.RENDER_DEPLOY_HOOK }}"
 
