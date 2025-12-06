@@ -1,15 +1,10 @@
-FROM ubuntu:22.04
+FROM eclipse-temurin:21-jre
 
 WORKDIR /app
 
-RUN useradd -m nonroot
-
-COPY target/hostelpro ./hostelpro
-
-RUN chmod +x hostelpro
-
-USER nonroot
+# Copia o JAR
+COPY target/*.jar app.jar
 
 EXPOSE 8080
 
-ENTRYPOINT ["./hostelpro"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
