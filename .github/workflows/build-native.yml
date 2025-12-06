@@ -57,13 +57,13 @@ jobs:
       # -----------------------------------------------------------
       # STEP 3: Setup GraalVM
       # -----------------------------------------------------------
-      - name: Setup GraalVM
-        uses: graalvm/setup-graalvm@v1
-        with:
-          distribution: graalvm-community
-          version: '23.1.2'
-          java-version: '21'
-          components: native-image
+      #- name: Setup GraalVM
+      #  uses: graalvm/setup-graalvm@v1
+      #  with:
+      #    distribution: graalvm-community
+      #    version: '23.1.2'
+      #    java-version: '21'
+      #    components: native-image
 
       # -----------------------------------------------------------
       # STEP 4: Cache Maven
@@ -78,7 +78,8 @@ jobs:
       # STEP 5: Build JAR (necessário para Buildpack)
       # -----------------------------------------------------------
       - name: Build JAR
-        run: ./mvnw clean package -Pnative -DskipTests
+        run: ./mvnw clean package -DskipTests
+        #run: ./mvnw clean package -Pnative -DskipTests
         #run: ./mvnw -Pnative spring-boot:build-image
 
 
