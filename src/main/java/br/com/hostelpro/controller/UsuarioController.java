@@ -21,7 +21,7 @@ import br.com.hostelpro.service.UsuarioService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/usuarios")
+@RequestMapping("/usuarios")
 public class UsuarioController {
 
 	@Autowired

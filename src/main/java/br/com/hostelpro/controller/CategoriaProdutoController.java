@@ -21,7 +21,7 @@ import br.com.hostelpro.service.CategoriaProdutoService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/categorias")
+@RequestMapping("/categorias")
 public class CategoriaProdutoController {
 
 	@Autowired

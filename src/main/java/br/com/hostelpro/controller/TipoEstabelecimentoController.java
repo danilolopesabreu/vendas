@@ -11,7 +11,7 @@ import br.com.hostelpro.mapper.TipoEstabelecimentoMapper;
 import br.com.hostelpro.service.TipoEstabelecimentoService;
 
 @RestController
-@RequestMapping("/api/tipos-estabelecimento")
+@RequestMapping("/tipos-estabelecimento")
 public class TipoEstabelecimentoController {
 
     private final TipoEstabelecimentoService tipoEstabelecimentoService;

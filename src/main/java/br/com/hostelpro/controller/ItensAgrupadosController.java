@@ -17,7 +17,7 @@ import br.com.hostelpro.mapper.ItensAgrupadosMapper;
 import br.com.hostelpro.service.ItensAgrupadosService;
 
 @RestController
-@RequestMapping("/api/itens-agrupados")
+@RequestMapping("/itens-agrupados")
 public class ItensAgrupadosController {
 
     private final ItensAgrupadosService service;

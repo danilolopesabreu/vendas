@@ -21,7 +21,7 @@ import br.com.hostelpro.service.ProdutoService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/produtos")
+@RequestMapping("/produtos")
 public class ProdutoController {
 
 	@Autowired
