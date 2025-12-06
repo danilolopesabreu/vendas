@@ -2,6 +2,7 @@ package br.com.hostelpro.service;
 import java.io.IOException;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cloudinary.Cloudinary;
@@ -10,11 +11,8 @@ import com.cloudinary.utils.ObjectUtils;
 @Service
 public class CloudinaryService {
 
-    private final Cloudinary cloudinary;
-
-    public CloudinaryService(Cloudinary cloudinary) {
-        this.cloudinary = cloudinary;
-    }
+	@Autowired
+    private Cloudinary cloudinary;
 
     public String uploadImageBase64(String base64, Integer estabelecimentoId) throws IOException {
 
