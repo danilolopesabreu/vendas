@@ -9,7 +9,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // todas as rotas
-                .allowedOrigins("http://localhost:4200") // front-end
+                .allowedOrigins("http://localhost:4200", "https://roaring-puffpuff-a89c14.netlify.app/") // front-end
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
