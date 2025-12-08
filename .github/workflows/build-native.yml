@@ -111,6 +111,19 @@ jobs:
       #    curl -X POST ${{ vars.RENDER_DEPLOY_HOOK }} 
 
       # -----------------------------------------------------------
+      # STEP 7: Deploy para Koyeb
+      # -----------------------------------------------------------
+      - name: Trigger Koyeb redeploy (Free plan compatible)
+        run: |
+          curl -X POST \
+            -H "Authorization: Bearer $KOYEB_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            "https://app.koyeb.com/v1/services/$KOYEB_SERVICE_ID/redeploy"
+        env:
+          KOYEB_API_TOKEN: ${{ secrets.KOYEB_API_TOKEN }}
+          KOYEB_SERVICE_ID: ${{ secrets.KOYEB_SERVICE_ID }}
+
+      # -----------------------------------------------------------
       # STEP 8: Upload target folder (opcional, debugging)
       # -----------------------------------------------------------
       - name: Upload full target (for debugging)
