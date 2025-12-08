@@ -18,7 +18,7 @@ import br.com.hostelpro.mapper.ProdutoEstabelecimentoMapper;
 import br.com.hostelpro.service.ProdutoEstabelecimentoService;
 
 @RestController
-@RequestMapping("/produtos-estabelecimento")
+@RequestMapping("/api/produtos-estabelecimento")
 public class ProdutoEstabelecimentoController {
 
     private final ProdutoEstabelecimentoService service;
