@@ -12,7 +12,6 @@ import br.com.hostelpro.entity.Estabelecimento;
 import br.com.hostelpro.exception.NotFoundException;
 import br.com.hostelpro.repository.CategoriaProdutoRepository;
 import br.com.hostelpro.repository.EstabelecimentoRepository;
-import jakarta.transaction.Transactional;
 
 @Service
 public class CategoriaProdutoService {
@@ -75,4 +74,8 @@ public class CategoriaProdutoService {
         repository.deleteById(id);
         logger.info("Categoria deletada id={}", id);
     }
+
+	public List<CategoriaProduto> listarCategoriasFolhas(Integer estabelecimentoId) {
+		return repository.findByEstabelecimentoIdAndSubcategoriasIsNull(estabelecimentoId);
+	}
 }

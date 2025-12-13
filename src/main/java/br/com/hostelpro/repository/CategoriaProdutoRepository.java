@@ -20,4 +20,6 @@ public interface CategoriaProdutoRepository extends JpaRepository<CategoriaProdu
 	
     List<CategoriaProduto> findByEstabelecimentoIdAndCategoriaPaiIsNull(Integer estabelecimentoId);
 
+    List<CategoriaProduto> findByEstabelecimentoIdAndSubcategoriasIsNull(Integer estabelecimentoId);
+
 }

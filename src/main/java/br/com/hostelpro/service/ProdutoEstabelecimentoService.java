@@ -5,7 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.hostelpro.entity.CategoriaProduto;
+import br.com.hostelpro.entity.Estabelecimento;
 import br.com.hostelpro.entity.ProdutoEstabelecimento;
+import br.com.hostelpro.exception.NotFoundException;
+import br.com.hostelpro.repository.CategoriaProdutoRepository;
+import br.com.hostelpro.repository.EstabelecimentoRepository;
 import br.com.hostelpro.repository.ProdutoEstabelecimentoRepository;
 
 @Service
@@ -16,13 +21,41 @@ public class ProdutoEstabelecimentoService {
     
     @Autowired
     private CloudinaryService cloudinaryService;
+    
+	@Autowired
+	private EstabelecimentoRepository estRepository;
+    
+	@Autowired
+	private CategoriaProdutoRepository categoriaRepository;
 
     public List<ProdutoEstabelecimento> listarProdutosMaisVendidosPorEstabelecimento(Integer estabelecimentoId) {
         return produtoEstabelecimentoRepository.findByEstabelecimentoIdOrderByRelevanciaDescQuantidadeVendidaDescNomeAsc(estabelecimentoId);
     }
 
-    public ProdutoEstabelecimento salvar(ProdutoEstabelecimento entity) {
-        return produtoEstabelecimentoRepository.save(entity);
+    public ProdutoEstabelecimento criar(ProdutoEstabelecimento produtoEstabelecimento) {
+    	
+    	Estabelecimento est = estRepository.findById(produtoEstabelecimento.getEstabelecimento().getId())
+                .orElseThrow(() -> new NotFoundException("Estabelecimento não encontrado: " + produtoEstabelecimento.getEstabelecimento().getId()));
+        produtoEstabelecimento.setEstabelecimento(est);
+
+        if (produtoEstabelecimento.getCategoria() != null && produtoEstabelecimento.getCategoria().getId() != null) {
+            CategoriaProduto cat = categoriaRepository.findById(produtoEstabelecimento.getCategoria().getId())
+                    .orElseThrow(() -> new NotFoundException("Categoria não encontrada: " + produtoEstabelecimento.getCategoria().getId()));
+            produtoEstabelecimento.setCategoria(cat);
+        }
+        
+        produtoEstabelecimento.setProdutoBase(null);
+        
+        try {
+
+    		String url = cloudinaryService.uploadImageBase64(produtoEstabelecimento.getImagem(), est.getId());
+    		produtoEstabelecimento.setImagem(url);
+    		
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        
+        return produtoEstabelecimentoRepository.save(produtoEstabelecimento);
     }
 
     public ProdutoEstabelecimento atualizar(ProdutoEstabelecimento entityAtualizada) {

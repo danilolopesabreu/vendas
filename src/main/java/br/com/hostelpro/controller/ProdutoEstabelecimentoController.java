@@ -49,7 +49,7 @@ public class ProdutoEstabelecimentoController {
     @PostMapping
     public ProdutoEstabelecimentoDTO criar(@RequestBody ProdutoEstabelecimentoDTO dto) {
         ProdutoEstabelecimento entity = mapper.toEntity(dto);
-        ProdutoEstabelecimento salvo = service.salvar(entity);
+        ProdutoEstabelecimento salvo = service.criar(entity);
         return mapper.toDTO(salvo);
     }
 
