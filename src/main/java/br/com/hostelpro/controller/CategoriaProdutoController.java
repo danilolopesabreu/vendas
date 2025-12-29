@@ -47,6 +47,11 @@ public class CategoriaProdutoController {
         return ResponseEntity.ok(service.listarPorEstabelecimento(estabelecimentoId).stream().map(mapper::toDTO).collect(Collectors.toList()));
     }
     
+    @GetMapping("/estabelecimento/{estabelecimentoId}/vinculadas")
+    public ResponseEntity<List<CategoriaProdutoDTO>> listarCategoriasVinculadas(@PathVariable Integer estabelecimentoId) {
+    	return ResponseEntity.ok(service.listarCategoriasParaEstabelecimento(estabelecimentoId).stream().map(mapper::toDTO).collect(Collectors.toList()));
+    }
+    
     @GetMapping("/estabelecimento/{estabelecimentoId}/principais")
     public ResponseEntity<List<CategoriaProdutoDTO>> listarCategoriasPrincipais(@PathVariable Integer estabelecimentoId) {
     	return ResponseEntity.ok(service.listarCategoriasPrincipais(estabelecimentoId).stream().map(mapper::toDTO).collect(Collectors.toList()));

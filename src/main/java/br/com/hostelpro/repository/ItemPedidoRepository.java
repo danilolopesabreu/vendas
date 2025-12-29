@@ -4,4 +4,6 @@ import br.com.hostelpro.entity.ItemPedido;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ItemPedidoRepository extends JpaRepository<ItemPedido, Integer> {
+	
+	Boolean existsByProdutoEstabelecimentoCategoriaId(Long categoriaId);
 }

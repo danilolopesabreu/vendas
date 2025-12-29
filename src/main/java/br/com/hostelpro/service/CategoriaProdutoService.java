@@ -52,6 +52,10 @@ public class CategoriaProdutoService {
     public List<CategoriaProduto> listarCategoriasPrincipais(Integer estabelecimentoId) {
     	return repository.findHierarquiaPorEstabelecimento(estabelecimentoId);
     }
+    
+    public List<CategoriaProduto> listarCategoriasParaEstabelecimento(Integer estabelecimentoId) {
+    	return repository.listarCategoriasParaEstabelecimento(estabelecimentoId);
+    }
 
     public CategoriaProduto atualizar(Integer id, CategoriaProduto dados) {
         CategoriaProduto existente = buscarPorId(id);

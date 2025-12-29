@@ -21,6 +21,10 @@ public class CategoriaProdutoDTO {
 	private LocalDateTime atualizadoEm;
 	
 	private String imagem;
+	
+	private boolean associadaAoEstabelecimento;
+	
+    private boolean possuiVenda;
 
 	// getters/setters
 	public Integer getId() {
@@ -85,5 +89,21 @@ public class CategoriaProdutoDTO {
 
 	public void setImagem(String imagem) {
 		this.imagem = imagem;
+	}
+
+	public boolean isAssociadaAoEstabelecimento() {
+		return associadaAoEstabelecimento;
+	}
+
+	public void setAssociadaAoEstabelecimento(boolean associadaAoEstabelecimento) {
+		this.associadaAoEstabelecimento = associadaAoEstabelecimento;
+	}
+
+	public boolean isPossuiVenda() {
+		return possuiVenda;
+	}
+
+	public void setPossuiVenda(boolean possuiVenda) {
+		this.possuiVenda = possuiVenda;
 	}
 }

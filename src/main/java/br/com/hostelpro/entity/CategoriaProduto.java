@@ -16,6 +16,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "categoria_produto")
@@ -54,7 +55,28 @@ public class CategoriaProduto {
 	@OneToMany(mappedBy = "categoriaProduto", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Produto> produtos;
 
+	@ManyToOne
+	@JoinColumn(name = "categoria_template_id")
+	private CategoriaProduto categoriaTemplate;
+	
+	@Transient
+	private boolean associadaAoEstabelecimento;
+	
+	@Transient
+    private boolean possuiVenda;
+    
 	public CategoriaProduto() {
+	}
+	
+	public CategoriaProduto(
+			Integer id,
+		    String nome,
+		    boolean associadaAoEstabelecimento,
+		    boolean possuiVenda) {
+		this.id = id;
+		this.nome = nome;
+		this.associadaAoEstabelecimento = associadaAoEstabelecimento;
+		this.possuiVenda = possuiVenda;
 	}
 
 	public CategoriaProduto(Integer id) {
@@ -137,5 +159,29 @@ public class CategoriaProduto {
 
 	public CategoriaProdutoEnum getCategoriaEnum() {
 		return CategoriaProdutoEnum.fromNome(this.nome);
+	}
+
+	public CategoriaProduto getCategoriaTemplate() {
+		return categoriaTemplate;
+	}
+
+	public void setCategoriaTemplate(CategoriaProduto categoriaTemplate) {
+		this.categoriaTemplate = categoriaTemplate;
+	}
+
+	public boolean isAssociadaAoEstabelecimento() {
+		return associadaAoEstabelecimento;
+	}
+
+	public void setAssociadaAoEstabelecimento(boolean associadaAoEstabelecimento) {
+		this.associadaAoEstabelecimento = associadaAoEstabelecimento;
+	}
+
+	public boolean isPossuiVenda() {
+		return possuiVenda;
+	}
+
+	public void setPossuiVenda(boolean possuiVenda) {
+		this.possuiVenda = possuiVenda;
 	}
 }

@@ -113,6 +113,7 @@ public class EstabelecimentoReplicationService {
 	    copia.setCategoriaPai(novaCategoriaPai);
 	    copia.setCriadoEm(LocalDateTime.now());
 	    copia.setAtualizadoEm(LocalDateTime.now());
+	    copia.setCategoriaTemplate(original);
 
 	    categoriasParaSalvar.add(copia);
 
